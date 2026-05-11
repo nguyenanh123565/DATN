@@ -1,0 +1,496 @@
+/* ─────────────────────────────────────
+ * SmartHome - Dark Theme Modern CSS
+ * Colors: Navy Dark (#1a1a2e, #16213e, #0f3460), Accent Red (#e94560)
+ * ───────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-main: #1a1a2e;
+    --bg-card: #16213e;
+    --bg-light: #0f3460;
+    --accent-color: #e94560;
+    --accent-hover: #ff5c77;
+    --text-primary: #e0e0e0;
+    --text-secondary: #a0a0B0;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --font-heading: 'Poppins', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --transition: all 0.3s ease;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── FIX TOÀN CỤC: Input & Select NỀN TRẮNG, CHỮ ĐEN ──────────────── */
+input.form-control,
+textarea.form-control,
+select.form-select {
+    background-color: #ffffff !important;
+    border-color: #ced4da !important;
+    color: #212529 !important;
+}
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+    color: #6c757d !important;
+}
+input.form-control:focus,
+textarea.form-control:focus,
+select.form-select:focus {
+    background-color: #ffffff !important;
+    border-color: var(--accent-color) !important;
+    color: #212529 !important;
+    box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2) !important;
+}
+/* Mũi tên select màu đen trên nền trắng */
+select.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") !important;
+}
+/* Option background */
+select.form-select option {
+    background-color: #ffffff;
+    color: #212529;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+}
+
+a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-main);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--bg-light);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+/* Navigation */
+.navbar {
+    background-color: rgba(22, 33, 62, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px 0;
+}
+.navbar-brand {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 2rem; /* Tăng từ 1.5rem lên 2rem */
+    color: #fff !important;
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.5px;
+}
+.navbar-brand i {
+    font-size: 1.8rem; /* Tăng kích thước icon */
+    margin-right: 12px !important;
+}
+.navbar-brand span {
+    color: var(--accent-color);
+}
+.nav-link {
+    color: var(--text-primary) !important;
+    font-weight: 500;
+    margin: 0 10px;
+}
+.nav-link:hover, .nav-link.active {
+    color: var(--accent-color) !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+    border-color: var(--accent-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+}
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 10px 20px;
+    transition: var(--transition);
+}
+.btn-outline:hover {
+    background: var(--bg-light);
+    color: #fff;
+}
+
+/* Cards (Products & Categories) */
+.product-card {
+    background-color: var(--bg-card);
+    border-radius: 15px;
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+    transition: var(--transition);
+    height: 100%;
+}
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
+    border-color: var(--accent-color);
+}
+
+.product-card-out-of-stock {
+    opacity: 0.7;
+    filter: grayscale(0.5);
+}
+.product-card-out-of-stock:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--border-color);
+}
+.product-img {
+    height: 250px;
+    object-fit: contain;
+    width: 100%;
+    padding: 20px;
+    background-color: #fff; /* Keep product images readable if they have no transparent bg */
+}
+.product-info {
+    padding: 20px;
+}
+.product-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.product-price {
+    font-size: 1.25rem;
+    color: var(--accent-color);
+    font-weight: 700;
+}
+.product-old-price {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+/* Hero Section */
+.hero-section {
+    padding: 80px 0;
+    position: relative;
+    overflow: hidden;
+}
+.hero-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+.hero-title span {
+    color: var(--accent-color);
+}
+.hero-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+.hero-img {
+    animation: float 6s ease-in-out infinite;
+    max-width: 100%;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+/* Sections */
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: var(--accent-color);
+    margin: 15px auto 0;
+    border-radius: 3px;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+@keyframes skeleton-loading {
+    0% { background-color: var(--bg-card); }
+    100% { background-color: var(--bg-light); }
+}
+.skeleton-img { width: 100%; height: 250px; }
+.skeleton-text { width: 100%; height: 20px; margin-bottom: 10px; border-radius: 4px; }
+
+/* AI Chat Widget */
+.ai-widget-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+.ai-widget-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--bg-light), var(--accent-color));
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(233, 69, 96, 0.5);
+    transition: var(--transition);
+}
+.ai-widget-btn:hover {
+    transform: scale(1.1);
+}
+.ai-chat-box {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    height: 550px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.ai-chat-box.open {
+    transform: scale(1);
+}
+.ai-chat-header {
+    padding: 15px 20px;
+    background-color: var(--bg-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+.ai-chat-header h5 {
+    margin: 0;
+    font-size: 1rem;
+}
+.ai-close-btn {
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+.ai-close-btn:hover {
+    color: #fff;
+}
+.ai-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.ai-msg {
+    max-width: 85%;
+    padding: 12px 15px;
+    border-radius: 15px;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+.ai-msg.bot {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+}
+.ai-msg.user {
+    background-color: var(--bg-light);
+    color: #fff;
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+}
+.ai-product-suggestion {
+    background: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.ai-product-suggestion:hover {
+    border-color: var(--accent-color);
+}
+.ai-product-suggestion img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 5px;
+}
+.ai-chat-input-area {
+    padding: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    gap: 10px;
+    background: var(--bg-main);
+}
+.ai-chat-input {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 20px;
+    padding: 10px 15px;
+    outline: none;
+}
+.ai-chat-input:focus {
+    border-color: var(--accent-color);
+}
+.ai-send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.ai-send-btn:hover {
+    background-color: var(--accent-hover);
+}
+.typing-indicator span {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background-color: var(--text-secondary);
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: bounce 1.4s infinite ease-in-out both;
+}
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+@keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+/* ─── FLASH SALE & VOUCHERS ──────────────────────────────── */
+.flash-sale-container {
+    background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+    border: 1px solid rgba(233, 69, 96, 0.2);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 40px;
+}
+.flash-sale-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.flash-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+}
+.flash-title i { color: #ff4d4d; animation: pulse 1s infinite; }
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+.countdown-timer {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.timer-unit {
+    background: #e94560;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: 700;
+    min-width: 35px;
+    text-align: center;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+.voucher-ticket {
+    background: #fff;
+    border-radius: 10px;
+    padding: 12px 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    position: relative;
+    border-left: 4px solid #e94560;
+    color: #1a1a2e;
+}
+.voucher-ticket i { font-size: 1.5rem; color: #e94560; }
+.voucher-info h6 { margin: 0; font-weight: 700; font-size: 0.9rem; }
+.voucher-info small { color: #666; font-size: 0.75rem; }
+.voucher-copy {
+    background: rgba(233, 69, 96, 0.1);
+    color: #e94560;
+    border: 1px dashed #e94560;
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin-left: auto;
+    transition: all 0.2s;
+}
+.voucher-copy:hover { background: #e94560; color: #fff; }
+

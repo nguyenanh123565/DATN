@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin tức SmartHome - Khuyến mãi & Công nghệ nhà thông minh</title>
+    <meta name="description" content="Cập nhật tin tức mới nhất về thiết bị nhà thông minh, khuyến mãi hấp dẫn và các bài review chuyên sâu từ SmartHome.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Breadcrumb */
+        .breadcrumb-bar {
+            background: var(--bg-card);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88rem;
+        }
+        .breadcrumb-bar a { color: var(--text-secondary); }
+        .breadcrumb-bar a:hover { color: var(--accent-color); }
+        .breadcrumb-bar .current { color: var(--accent-color); font-weight: 500; }
+
+        /* Category Tabs */
+        .news-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .news-tab {
+            padding: 8px 20px;
+            border-radius: 25px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            background: transparent;
+        }
+        .news-tab:hover, .news-tab.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #fff;
+        }
+
+        /* News Card */
+        .news-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+        .news-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+            border-color: rgba(233,69,96,0.3);
+        }
+        .news-card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .news-card-body { padding: 20px; }
+        .news-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .tag-khuyen-mai { background: rgba(233,69,96,0.15); color: #e94560; border: 1px solid rgba(233,69,96,0.3); }
+        .tag-tin-tuc { background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+        .tag-review { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); }
+        .tag-tu-van { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.3); }
+
+        .news-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .news-excerpt {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        .news-views { gap: 5px; }
+
+        /* Featured big card */
+        .news-card-featured .news-card-img { height: 350px; }
+        .news-card-featured .news-title { font-size: 1.4rem; }
+        .news-card-featured .news-excerpt { -webkit-line-clamp: 4; }
+
+        /* Sidebar */
+        .sidebar-widget {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        .sidebar-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent-color);
+        }
+        .sidebar-news-item {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: color 0.2s;
+        }
+        .sidebar-news-item:last-child { border-bottom: none; }
+        .sidebar-news-item:hover { color: var(--accent-color); }
+        .sidebar-news-img {
+            width: 65px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: #fff;
+        }
+        .sidebar-news-text { font-size: 0.85rem; font-weight: 500; line-height: 1.4; }
+        .sidebar-news-date { color: var(--text-secondary); font-size: 0.75rem; margin-top: 4px; }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-house-signal"></i> Smart<span>Home</span></a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="news.html"><i class="fa-solid fa-newspaper me-1"></i>Tin tức</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tuvan.html">Tư vấn</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html" style="position:relative">
+                            <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle" id="cart-count" style="display:none">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-login-btn">
+                        <a href="auth.html" class="btn btn-primary ms-2"><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</a>
+                    </li>
+                    <li class="nav-item dropdown" id="nav-user-menu" style="display:none">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user fs-5 text-accent"></i>
+                            <span id="nav-user-name" class="ms-1">Tài khoản</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html">Hồ sơ</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <a href="index.html">Trang chủ</a>
+            <span class="mx-2 text-secondary">›</span>
+            <span class="current">Tin tức SmartHome</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Left: News Feed -->
+            <div class="col-lg-8">
+                <!-- Page Title -->
+                <div class="d-flex align-items-center mb-4">
+                    <h1 class="h3 mb-0"><i class="fa-solid fa-newspaper text-accent me-2"></i>Tin tức & Khuyến mãi</h1>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="news-tabs">
+                    <button class="news-tab active" onclick="filterNews('all', this)">Tất cả</button>
+                    <button class="news-tab" onclick="filterNews('khuyen-mai', this)">🎁 Khuyến mãi</button>
+                    <button class="news-tab" onclick="filterNews('tin-tuc', this)">📰 Tin tức</button>
+                    <button class="news-tab" onclick="filterNews('review', this)">⭐ Review sản phẩm</button>
+                    <button class="news-tab" onclick="filterNews('tu-van', this)">💡 Tư vấn</button>
+                </div>
+
+                <!-- Featured Article -->
+                <div class="mb-4 news-item" data-cat="khuyen-mai">
+                    <a href="news-detail.html?id=featured" class="text-decoration-none">
+                        <div class="news-card news-card-featured" data-id="featured">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80"
+                                 class="news-card-img" alt="Khuyến mãi tháng 4">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-khuyen-mai">🎁 Khuyến mãi</span>
+                                <div class="news-title">Sale lớn tháng 4/2026: Giảm đến 30% Robot hút bụi Ecovacs, Roborock</div>
+                                <div class="news-excerpt">Tháng 4 này SmartHome tung chương trình khuyến mãi cực lớn, giảm giá trực tiếp lên đến 30% cho các dòng robot hút bụi cao cấp như Ecovacs Deebot T30 Pro, Roborock S8 MaxV Ultra. Ngoài ra còn tặng kèm phụ kiện và bảo hành...</div>
+                                <div class="news-meta">
+                                    <span><i class="fa-regular fa-calendar me-1"></i>08/04/2026</span>
+                                    <span class="news-views"><i class="fa-solid fa-eye me-1"></i>1.234 lượt xem</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- News Grid -->
+                <div class="row g-4" id="news-grid">
+                    <div class="col-md-6 news-item" data-cat="tin-tuc">
+                        <div class="news-card" data-id="1">
+                            <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=400&q=80" class="news-card-img" alt="Camera AI">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-tin-tuc">📰 Tin tức</span>
+                                <div class="news-title">Top 5 Camera AI tốt nhất 2026: Bảo vệ ngôi nhà từ mọi góc độ</div>
+                                <div class="news-excerpt">Cùng SmartHome điểm qua 5 mẫu camera an ninh AI nổi bật nhất năm 2026, từ Xiaomi, Ezviz đến Hikvision...</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>06/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>856</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="review">
+                        <div class="news-card" data-id="2">
+                            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&q=80" class="news-card-img" alt="Roborock S8">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-review">⭐ Review</span>
+                                <div class="news-title">Review Roborock S8 MaxV Ultra: Robot hút bụi đỉnh cao 2026</div>
+                                <div class="news-excerpt">Đánh giá chi tiết Roborock S8 MaxV Ultra — robot hút bụi lau nhà cao cấp nhất hiện nay với lực hút 10000Pa...</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>05/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>2.143</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="tu-van">
+                        <div class="news-card" data-id="3">
+                            <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=400&q=80" class="news-card-img" alt="Nhà thông minh">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-tu-van">💡 Tư vấn</span>
+                                <div class="news-title">Hướng dẫn xây dựng hệ thống nhà thông minh hoàn chỉnh từ A-Z</div>
+                                <div class="news-excerpt">Bạn muốn biến ngôi nhà trở thành "smart home" thực sự? Bài viết hướng dẫn chi tiết từng bước từ chọn hub đến kết nối thiết bị...</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>04/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>3.567</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="khuyen-mai">
+                        <div class="news-card" data-id="4">
+                            <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&q=80" class="news-card-img" alt="Khuyến mãi">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-khuyen-mai">🎁 Khuyến mãi</span>
+                                <div class="news-title">Flash Sale cuối tuần: Camera Xiaomi C500 Pro chỉ còn 790.000đ</div>
+                                <div class="news-excerpt">Chỉ trong 48 giờ cuối tuần, Camera Xiaomi C500 Pro 5MP giảm còn 790.000đ — mức giá cực kỳ hấp dẫn...</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>03/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>4.210</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="review">
+                        <div class="news-card" data-id="5">
+                            <img src="https://images.unsplash.com/photo-1558089687-db0f4e53053c?w=400&q=80" class="news-card-img" alt="Philips Hue">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-review">⭐ Review</span>
+                                <div class="news-title">Philips Hue vs Yeelight: Bộ đèn thông minh nào đáng tiền hơn?</div>
+                                <div class="news-excerpt">So sánh chi tiết 2 dòng đèn thông minh phổ biến nhất: Philips Hue Color Ambiance vs Yeelight W3. Ai thắng?</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>02/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>1.876</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="tin-tuc">
+                        <div class="news-card" data-id="6">
+                            <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=400&q=80" class="news-card-img" alt="Smart lock">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-tin-tuc">📰 Tin tức</span>
+                                <div class="news-title">Xu hướng nhà thông minh 2026: AI điều khiển, tiết kiệm điện</div>
+                                <div class="news-excerpt">Năm 2026, nhà thông minh không chỉ là điều khiển bằng app — AI sẽ học thói quen của bạn và tự tối ưu hoá...</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>01/04/2026</span><span><i class="fa-solid fa-eye me-1"></i>987</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="tu-van">
+                        <div class="news-card" data-id="7">
+                            <img src="https://images.unsplash.com/photo-1558002038-1055907df827?w=400&q=80" class="news-card-img" alt="Khóa thông minh">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-tu-van">💡 Tư vấn</span>
+                                <div class="news-title">Khóa cửa thông minh: Nên chọn mở bằng Vân tay hay FaceID?</div>
+                                <div class="news-excerpt">Công nghệ khoá cửa đang phát triển rất nhanh. Bài viết này sẽ phân tích ưu nhược điểm của công nghệ nhận diện khuôn mặt so với vân tay truyền thống.</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>30/03/2026</span><span><i class="fa-solid fa-eye me-1"></i>2.015</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="review">
+                        <div class="news-card" data-id="8">
+                            <img src="https://images.unsplash.com/photo-1543512214-318c7553f230?w=400&q=80" class="news-card-img" alt="Google Nest Hub">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-review">⭐ Review</span>
+                                <div class="news-title">Đánh giá Google Nest Hub Max: Trợ lý đắc lực cho gia đình</div>
+                                <div class="news-excerpt">Màn hình thông minh 10 inch của Google làm được những gì? Có đáng để bạn bỏ ra hơn 5 triệu đồng để sở hữu làm trung tâm điều khiển nhà?</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>28/03/2026</span><span><i class="fa-solid fa-eye me-1"></i>1.432</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="tin-tuc">
+                        <div class="news-card" data-id="9">
+                            <img src="https://images.unsplash.com/photo-1585501869383-747d9d6e42b8?w=400&q=80" class="news-card-img" alt="Lọc không khí">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-tin-tuc">📰 Tin tức</span>
+                                <div class="news-title">Giải pháp máy lọc không khí cho chung cư mùa nồm ẩm</div>
+                                <div class="news-excerpt">Mùa nồm ẩm ở miền Bắc khiến không khí khó chịu và nấm mốc phát triển. Tìm hiểu ngay các giải pháp lọc khí kết hợp hút ẩm hiệu quả nhất hiện nay.</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>25/03/2026</span><span><i class="fa-solid fa-eye me-1"></i>3.120</span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 news-item" data-cat="khuyen-mai">
+                        <div class="news-card" data-id="10">
+                            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80" class="news-card-img" alt="Combo Smarthome">
+                            <div class="news-card-body">
+                                <span class="news-tag tag-khuyen-mai">🎁 Khuyến mãi</span>
+                                <div class="news-title">Trọn bộ Combo Smarthome Dành Cho Căn Hộ 2 Phòng Ngủ - Giảm 15%</div>
+                                <div class="news-excerpt">Tiết kiệm ngay 15% khi lắp đặt trọn gói hệ thống SmartHome cho căn hộ 2 phòng ngủ, bao gồm: Hub, Công tắc thông minh, Cảm biến cửa và Rèm tự động.</div>
+                                <div class="news-meta"><span><i class="fa-regular fa-calendar me-1"></i>20/03/2026</span><span><i class="fa-solid fa-eye me-1"></i>5.600</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Sidebar -->
+            <div class="col-lg-4">
+                <!-- Hot News -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-title">🔥 Tin xem nhiều nhất</div>
+                    <a href="news-detail.html" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Flash Sale Camera Xiaomi C500 Pro chỉ 790.000đ</div>
+                            <div class="sidebar-news-date">03/04/2026</div>
+                        </div>
+                    </a>
+                    <a href="news-detail.html" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Hướng dẫn xây nhà thông minh từ A-Z 2026</div>
+                            <div class="sidebar-news-date">04/04/2026</div>
+                        </div>
+                    </a>
+                    <a href="news-detail.html" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Review Roborock S8 MaxV Ultra chi tiết nhất</div>
+                            <div class="sidebar-news-date">05/04/2026</div>
+                        </div>
+                    </a>
+                    <a href="news-detail.html" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">So sánh Philips Hue vs Yeelight — Ai thắng?</div>
+                            <div class="sidebar-news-date">02/04/2026</div>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Promo Banner -->
+                <div class="sidebar-widget" style="background: linear-gradient(135deg, #e94560, #0f3460); border:none">
+                    <div class="text-center text-white">
+                        <i class="fa-solid fa-tags fs-1 mb-3"></i>
+                        <h5>Ưu đãi đặc biệt</h5>
+                        <p class="small mb-3">Giảm thêm 5% khi đăng ký tài khoản SmartHome!</p>
+                        <a href="auth.html" class="btn btn-light btn-sm fw-bold">Đăng ký ngay</a>
+                    </div>
+                </div>
+
+                <!-- Categories -->
+                <div class="sidebar-widget">
+                    <div class="sidebar-title">📂 Danh mục sản phẩm</div>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Robot hút bụi</a>
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Camera AI</a>
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Đèn thông minh</a>
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Khóa cửa</a>
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Lọc không khí</a>
+                        <a href="products.html" class="btn btn-sm btn-outline btn-outline-secondary">Loa thông minh</a>
+                    </div>
+                </div>
+
+                <!-- Tư vấn CTA -->
+                <div class="sidebar-widget text-center">
+                    <i class="fa-solid fa-headset fs-1 text-accent mb-3"></i>
+                    <h6>Cần tư vấn chọn sản phẩm?</h6>
+                    <p class="text-secondary small">Chuyên gia SmartHome luôn sẵn sàng hỗ trợ bạn 24/7</p>
+                    <a href="tuvan.html" class="btn btn-primary btn-sm w-100">Tư vấn miễn phí</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div id="ai-widget" class="ai-widget-container">
+        <div class="ai-widget-btn" id="ai-widget-btn"><i class="fa-solid fa-robot"></i></div>
+        <div class="ai-chat-box" id="ai-chat-box">
+            <div class="ai-chat-header">
+                <h5 class="text-white m-0">Trợ lý SmartHome AI</h5>
+                <i class="fa-solid fa-xmark ai-close-btn" id="ai-close-btn"></i>
+            </div>
+            <div class="ai-chat-messages" id="ai-chat-messages">
+                <div class="ai-msg bot">Chào bạn! Bạn cần tư vấn sản phẩm gì hôm nay?</div>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Hỏi về sản phẩm...">
+                <button class="ai-send-btn" id="ai-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ai-chat.js"></script>
+    <script>
+        function filterNews(cat, btnEl) {
+            document.querySelectorAll('.news-tab').forEach(b => b.classList.remove('active'));
+            btnEl.classList.add('active');
+
+            const items = document.querySelectorAll('.news-item');
+            items.forEach(item => {
+                if (cat === 'all' || item.dataset.cat === cat) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // Make all news cards clickable to detail page
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.news-card').forEach(card => {
+                card.style.cursor = 'pointer';
+                card.addEventListener('click', (e) => {
+                    // Prevent default if they clicked a link inside
+                    if (e.target.closest('a')) return;
+                    
+                    const articleId = card.dataset.id;
+                    if (articleId) {
+                        window.location.href = 'news-detail.html?id=' + articleId;
+                    } else {
+                        window.location.href = 'news-detail.html';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

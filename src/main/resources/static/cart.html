@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng - SmartHome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .cart-item {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #fff;
+            margin-right: 15px;
+        }
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            background: var(--bg-main);
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+        .qty-controls button {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .qty-controls input {
+            width: 40px;
+            background: none;
+            border: none;
+            color: #fff;
+            text-align: center;
+        }
+        .btn-remove {
+            color: var(--accent-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-house-signal"></i> Smart<span>Home</span></a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Sản phẩm</a></li>
+                    <li class="nav-item dropdown" id="nav-user-menu">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user fs-5 text-accent"></i> Tài khoản
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="profile.html">Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="orders.html">Lịch sử Đơn hàng</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h2 class="font-heading mb-4">Giỏ hàng của bạn</h2>
+        
+        <div class="row">
+            <div class="col-lg-8" id="cart-items-container">
+                <div class="text-center py-5">
+                    <div class="spinner-border text-accent" role="status"></div>
+                </div>
+            </div>
+            
+            <div class="col-lg-4">
+                <div class="card bg-card border-secondary mt-3 mt-lg-0">
+                    <div class="card-body p-4">
+                        <h4 class="font-heading mb-4">Tóm tắt đơn hàng</h4>
+                        <div class="d-flex justify-content-between mb-3 text-secondary">
+                            <span>Tạm tính</span>
+                            <span id="subTotal">0 đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 text-secondary">
+                            <span>Giao hàng</span>
+                            <span>Miễn phí</span>
+                        </div>
+                        <hr class="border-secondary">
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong class="fs-5">Tổng cộng</strong>
+                            <strong class="fs-5 text-accent" id="totalPrice">0 đ</strong>
+                        </div>
+                        <a href="checkout.html" class="btn btn-primary w-100 py-3 fw-bold" id="btnCheckout" style="display:none">Tiến hành thanh toán</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Chat Widget -->
+    <div id="ai-widget" class="ai-widget-container">
+        <div class="ai-widget-btn" id="ai-widget-btn"><i class="fa-solid fa-robot"></i></div>
+        <div class="ai-chat-box" id="ai-chat-box">
+            <div class="ai-chat-header">
+                <h5 class="text-white m-0">Trợ lý SmartHome AI</h5>
+                <i class="fa-solid fa-xmark ai-close-btn" id="ai-close-btn"></i>
+            </div>
+            <div class="ai-chat-messages" id="ai-chat-messages"></div>
+            <div class="ai-chat-input-area">
+                <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="...">
+                <button class="ai-send-btn" id="ai-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ai-chat.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if(!localStorage.getItem('token')) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            fetchCart();
+        });
+
+        function fetchCart() {
+            apiClient.get('/cart')
+            .then(res => {
+                const data = res.data.data;
+                const container = document.getElementById('cart-items-container');
+                const btnCheckout = document.getElementById('btnCheckout');
+                
+                if(!data || !data.items || data.items.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-5 bg-card rounded-3 border-secondary" style="border:1px solid">
+                            <i class="fa-solid fa-cart-shopping fs-1 text-secondary mb-3"></i>
+                            <h4 class="text-white">Giỏ hàng trống</h4>
+                            <p class="text-secondary">Hãy tiếp tục mua sắm các sản phẩm thông minh của chúng tôi.</p>
+                            <a href="products.html" class="btn btn-outline mt-3">Mua sắm ngay</a>
+                        </div>
+                    `;
+                    document.getElementById('subTotal').innerText = '0 đ';
+                    document.getElementById('totalPrice').innerText = '0 đ';
+                    btnCheckout.style.display = 'none';
+                    return;
+                }
+
+                let html = '';
+                let total = 0;
+                data.items.forEach(item => {
+                    let price = item.unitPrice;
+                    let itemTotal = item.subtotal;
+                    total += itemTotal;
+                    
+                    html += `
+                        <div class="cart-item">
+                            <img src="${item.productImage ? item.productImage : 'https://dummyimage.com/100x100/f0/aaa&text=No+Img'}" alt="${item.productName}">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1"><a href="product-detail.html?id=${item.productId}">${item.productName}</a></h5>
+                                <p class="text-accent mb-2 fw-bold">${formatCurrency(price)}</p>
+                                <div class="d-flex align-items-center">
+                                    <div class="qty-controls me-3">
+                                        <button onclick="updateQty(${item.productId}, ${item.quantity - 1})">-</button>
+                                        <input type="text" value="${item.quantity}" readonly>
+                                        <button onclick="updateQty(${item.productId}, ${item.quantity + 1})">+</button>
+                                    </div>
+                                    <button class="btn-remove" onclick="removeObj(${item.productId})"><i class="fa-solid fa-trash-can"></i> Xóa</button>
+                                </div>
+                            </div>
+                            <div class="text-end fw-bold d-none d-md-block">
+                                ${formatCurrency(itemTotal)}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                document.getElementById('subTotal').innerText = formatCurrency(total);
+                document.getElementById('totalPrice').innerText = formatCurrency(total);
+                btnCheckout.style.display = 'block';
+            })
+            .catch(err => {
+                document.getElementById('cart-items-container').innerHTML = `<div class="alert alert-danger">Lỗi tải giỏ hàng</div>`;
+            });
+        }
+
+        // FIX: API PUT /cart/items nhận body {productId, quantity}, KHÔNG phải path /{id}
+        function updateQty(productId, newQty) {
+            if(newQty < 1) return;
+            apiClient.put('/cart/items', { productId: productId, quantity: newQty })
+            .then(res => fetchCart())
+            .catch(err => showToast('error', 'Cập nhật thất bại'));
+        }
+
+        // FIX: API DELETE /cart/items/{productId} nhận productId (không phải itemId)
+        function removeObj(productId) {
+            Swal.fire({
+                title: 'Xóa sản phẩm?',
+                text: "Bạn có chắc muốn xóa khỏi giỏ hàng?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e94560',
+                cancelButtonColor: '#0f3460',
+                confirmButtonText: 'Có, Xóa!',
+                cancelButtonText: 'Huỷ'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    apiClient.delete(`/cart/items/${productId}`)
+                    .then(res => {
+                        showToast('success', 'Đã xóa sản phẩm');
+                        fetchCart();
+                    })
+                    .catch(e => showToast('error', 'Lỗi khi xóa'));
+                }
+            })
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết tin tức - SmartHome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .breadcrumb-bar { background: var(--bg-card); padding: 10px 0; border-bottom: 1px solid var(--border-color); font-size: 0.88rem; }
+        .breadcrumb-bar a { color: var(--text-secondary); text-decoration: none; }
+        .breadcrumb-bar a:hover { color: var(--accent-color); }
+        .breadcrumb-bar .current { color: var(--accent-color); font-weight: 500; }
+        
+        .article-header { margin-bottom: 30px; }
+        .article-tag { display: inline-block; font-size: 0.8rem; padding: 4px 15px; border-radius: 20px; font-weight: 600; margin-bottom: 15px; background: rgba(59,130,246,0.15); color: #3b82f6; border: 1px solid rgba(59,130,246,0.3); }
+        .article-title { font-size: 2.2rem; font-weight: 700; color: var(--text-primary); line-height: 1.3; margin-bottom: 15px; }
+        .article-meta { display: flex; align-items: center; gap: 20px; color: var(--text-secondary); font-size: 0.9rem; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); }
+        
+        .article-content { font-size: 1.05rem; line-height: 1.8; color: var(--text-primary); margin-top: 30px; }
+        .article-content img { width: 100%; border-radius: 12px; margin: 20px 0; }
+        .article-content h2 { font-size: 1.5rem; font-weight: 600; margin: 30px 0 15px; color: #fff; }
+        .article-content p { margin-bottom: 1.5rem; }
+        .article-content blockquote { background: rgba(233,69,96,0.05); border-left: 4px solid var(--accent-color); padding: 20px; margin: 20px 0; font-style: italic; border-radius: 0 10px 10px 0; }
+        
+        .share-buttons { display: flex; gap: 10px; margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border-color); }
+        .btn-share { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s; text-decoration: none; }
+        .btn-share:hover { transform: translateY(-3px); opacity: 0.9; color: white; }
+        .bg-facebook { background: #1877F2; }
+        .bg-twitter { background: #1DA1F2; }
+        .bg-link { background: #6c63ff; }
+
+        .sidebar-widget { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; margin-bottom: 24px; }
+        .sidebar-title { font-size: 1rem; font-weight: 600; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid var(--accent-color); }
+        .sidebar-news-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color); text-decoration: none; color: var(--text-primary); transition: color 0.2s; }
+        .sidebar-news-item:last-child { border-bottom: none; }
+        .sidebar-news-item:hover { color: var(--accent-color); }
+        .sidebar-news-img { width: 65px; height: 55px; object-fit: cover; border-radius: 8px; }
+        .sidebar-news-text { font-size: 0.85rem; font-weight: 500; line-height: 1.4; }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-house-signal"></i> Smart<span>Home</span></a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="news.html">Tin tức</a></li>
+                    <li class="nav-item"><a class="nav-link" href="tuvan.html">Tư vấn</a></li>
+                    <li class="nav-item"><a href="auth.html" class="btn btn-primary ms-2">Đăng nhập</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <a href="index.html">Trang chủ</a> <span class="mx-2 text-secondary">›</span>
+            <a href="news.html">Tin tức</a> <span class="mx-2 text-secondary">›</span>
+            <span class="current">Chi tiết bài viết</span>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row">
+            <!-- Article Content -->
+            <div class="col-lg-8">
+                <article class="article-header">
+                    <span class="article-tag" id="detail-tag"><i class="fa-solid fa-fire me-1"></i> Tin nổi bật</span>
+                    <h1 class="article-title" id="detail-title">Đang tải nội dung...</h1>
+                    <div class="article-meta">
+                        <span><i class="fa-solid fa-user-pen me-1"></i> Bởi SmartHome Admin</span>
+                        <span><i class="fa-regular fa-calendar me-1"></i> <span id="detail-date">--/--/----</span></span>
+                        <span><i class="fa-solid fa-eye me-1"></i> <span id="detail-views">--</span> lượt xem</span>
+                    </div>
+                </article>
+
+                <div class="article-content" id="detail-content">
+                    <p class="text-center mt-5"><i class="fa-solid fa-spinner fa-spin fs-2"></i></p>
+                </div>
+
+                <!-- Share -->
+                <div class="share-buttons">
+                    <span class="d-flex align-items-center me-3 fw-bold">Chia sẻ:</span>
+                    <a href="#" class="btn-share bg-facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="btn-share bg-twitter"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="btn-share bg-link" onclick="navigator.clipboard.writeText(window.location.href); alert('Đã copy link!');"><i class="fa-solid fa-link"></i></a>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4 mt-5 mt-lg-0">
+                <div class="sidebar-widget">
+                    <div class="sidebar-title">🔥 Bài viết liên quan</div>
+                    <a href="news-detail.html?id=4" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Flash Sale Camera Xiaomi C500 Pro chỉ 790.000đ</div>
+                            <div class="sidebar-news-date">03/04/2026</div>
+                        </div>
+                    </a>
+                    <a href="news-detail.html?id=2" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Review Roborock S8 MaxV Ultra chi tiết nhất</div>
+                            <div class="sidebar-news-date">05/04/2026</div>
+                        </div>
+                    </a>
+                    <a href="news-detail.html?id=3" class="sidebar-news-item">
+                        <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=100&q=70" class="sidebar-news-img" alt="">
+                        <div>
+                            <div class="sidebar-news-text">Hướng dẫn xây nhà thông minh từ A-Z 2026</div>
+                            <div class="sidebar-news-date">04/04/2026</div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="sidebar-widget text-center">
+                    <i class="fa-solid fa-headset fs-1 text-accent mb-3"></i>
+                    <h6>Cần tư vấn chọn sản phẩm?</h6>
+                    <p class="text-secondary small">Chuyên gia SmartHome luôn sẵn sàng hỗ trợ bạn 24/7</p>
+                    <a href="tuvan.html" class="btn btn-primary btn-sm w-100">Tư vấn miễn phí</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/ai-chat.js"></script>
+    <script>if(typeof injectChatbotHTML === 'function') injectChatbotHTML();</script>
+    <script>
+        // MOCK DATA: Chứa dữ liệu của các bài viết
+        const newsData = {
+            'featured': {
+                tag: '🎁 Khuyến mãi', tagClass: 'tag-khuyen-mai', title: 'Sale lớn tháng 4/2026: Giảm đến 30% Robot hút bụi Ecovacs, Roborock', date: '08/04/2026', views: '1.234',
+                content: `
+                    <p class="lead fw-medium text-light">Tháng 4 này SmartHome tung chương trình khuyến mãi cực lớn, giảm giá trực tiếp lên đến 30% cho các dòng robot hút bụi cao cấp. Cơ hội ngàn năm có một để sở hữu trợ lý dọn dẹp đắc lực cho gia đình!</p>
+                    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Khuyến mãi">
+                    <h2>1. Chi tiết chương trình</h2>
+                    <p>- Thời gian: Từ 10/04/2026 đến hết 30/04/2026.<br>- Áp dụng cho mọi khách hàng đặt mua online trên Website hoặc tới trực tiếp cửa hàng SmartHome.</p>
+                    <blockquote>"Khi mua Roborock S8 MaxV Ultra trong thời gian này, quý khách sẽ được tặng kèm thêm bộ phụ kiện trị giá 1.500.000đ và gói bảo hành vàng 24 tháng."</blockquote>
+                    <h2>2. Các sản phẩm hot nhất</h2>
+                    <p>- <strong>Ecovacs Deebot T30 Pro Omni:</strong> Giảm từ 19.990.000đ còn 15.990.000đ.<br>- <strong>Roborock S8 MaxV Ultra:</strong> Tặng kèm bộ phụ kiện 1.5 triệu.<br>- <strong>Dreame L20 Ultra:</strong> Giảm ngay 2.000.000đ tiền mặt.</p>
+                    <p>Hãy nhanh tay cho ngay vào giỏ hàng trước khi hết số lượng khuyến mãi nhé!</p>
+                `
+            },
+            '1': {
+                tag: '📰 Tin tức', tagClass: 'tag-tin-tuc', title: 'Top 5 Camera AI tốt nhất 2026: Bảo vệ ngôi nhà từ mọi góc độ', date: '06/04/2026', views: '856',
+                content: `
+                    <p class="lead fw-medium text-light">Năm 2026 chứng kiến sự bùng nổ của công nghệ AI tích hợp trong camera giám sát gia đình. Không chỉ dừng lại ở việc ghi hình, camera giờ đây đã có thể phân biệt người, vật nuôi, phát hiện tiếng khóc trẻ em và chủ động cảnh báo xâm nhập.</p>
+                    <img src="https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80" alt="Camera AI">
+                    <h2>1. Sự nâng cấp mạnh mẽ của cảm biến và AI</h2>
+                    <p>Khác với các thế hệ trước, camera an ninh hiện đại được trang bị vi xử lý AI cục bộ (Edge AI), giúp quá trình phân tích hình ảnh diễn ra ngay trên thiết bị mà không cần gửi dữ liệu lên đám mây. Điều này mang lại tốc độ phản hồi tính bằng mili-giây và bảo mật quyền riêng tư tuyệt đối.</p>
+                    <blockquote>"Với việc ứng dụng Neural Processing Unit (NPU) vào phần cứng camera, tỉ lệ báo động giả do gió thổi, lá cây rơi hay thú cưng chạy ngang đã giảm xuống gần như bằng 0%." - Chuyên gia bảo mật chia sẻ.</blockquote>
+                    <h2>2. Các mẫu Camera đáng mua nhất hiện nay</h2>
+                    <p>Tại SmartHome, chúng tôi đề xuất các thương hiệu uy tín như Xiaomi (C500 Pro), Ezviz (C6 2K), và Imou. Các mẫu này đều hỗ trợ xoay 360 độ, theo dõi chuyển động thông minh, và đàm thoại 2 chiều với công nghệ lọc tiếng ồn.</p>
+                    <img src="https://images.unsplash.com/photo-1557438159-51eecce36926?w=800&q=80" alt="Smart Home System">
+                `
+            },
+            '2': {
+                tag: '⭐ Review', tagClass: 'tag-review', title: 'Review Roborock S8 MaxV Ultra: Robot hút bụi đỉnh cao 2026', date: '05/04/2026', views: '2.143',
+                content: `
+                    <p class="lead fw-medium text-light">Roborock S8 MaxV Ultra vừa ra mắt đã thiết lập một tiêu chuẩn hoàn toàn mới cho ngành công nghiệp robot hút bụi với lực hút kinh hoàng 10.000Pa và chổi quét góc thông minh.</p>
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80" alt="Roborock S8">
+                    <h2>1. Thiết kế và Trạm sạc đa năng</h2>
+                    <p>Trạm sạc của S8 MaxV không chỉ tự động giặt giẻ, sấy khô bằng khí nóng mà còn tự động pha dung dịch nước lau sàn. Bạn gần như không phải động tay vào việc dọn dẹp trong suốt 1 tháng liền.</p>
+                    <h2>2. Lực hút và khả năng làm sạch</h2>
+                    <p>Với lực hút 10.000Pa kết hợp hệ thống chổi chính kép DuoRoller, robot dễ dàng hút sạch tóc, lông thú cưng và bụi mịn sâu trong thảm. Công nghệ lau rung Sonic 4000 lần/phút đánh bay mọi vết bẩn cứng đầu nhất.</p>
+                    <blockquote>"Điều tuyệt vời nhất là cánh tay robot (FlexiArm) tự động thò ra để quét sạch các góc tường - nơi mà các dòng robot trước đây luôn bó tay."</blockquote>
+                `
+            },
+            '3': {
+                tag: '💡 Tư vấn', tagClass: 'tag-tu-van', title: 'Hướng dẫn xây dựng hệ thống nhà thông minh hoàn chỉnh từ A-Z', date: '04/04/2026', views: '3.567',
+                content: `
+                    <p class="lead fw-medium text-light">Bạn muốn biến ngôi nhà trở thành "smart home" thực sự? Không cần phải là kỹ sư công nghệ, bài viết này sẽ hướng dẫn bạn thiết lập hệ thống từ những bước cơ bản nhất.</p>
+                    <img src="https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=800&q=80" alt="Smart home">
+                    <h2>1. Lựa chọn "bộ não" trung tâm (Hub)</h2>
+                    <p>Mọi thiết bị cần kết nối với nhau qua một trung tâm. Bạn có thể chọn Google Nest Hub, Apple HomePod hoặc Aqara Hub M3 (hỗ trợ Matter). Chuẩn Matter đang là tương lai vì nó giúp thiết bị của nhiều hãng khác nhau hoạt động chung được.</p>
+                    <h2>2. Bắt đầu với Hệ thống chiếu sáng</h2>
+                    <p>Thay vì đập phá tường để làm lại công tắc, cách dễ nhất là mua các bóng đèn thông minh (như Philips Hue, Yeelight) hoặc thay mặt công tắc Wifi/Zigbee. Bạn có thể thiết lập ngữ cảnh: "Khi mở cửa, đèn phòng khách tự sáng".</p>
+                    <h2>3. An ninh và Tiện ích</h2>
+                    <p>Khóa cửa thông minh, cảm biến chuyển động và camera AI là những lớp phòng vệ tuyệt vời. Sau đó, bạn có thể bổ sung rèm cửa tự động và robot hút bụi để hoàn thiện sự tiện nghi.</p>
+                `
+            },
+            '4': {
+                tag: '🎁 Khuyến mãi', tagClass: 'tag-khuyen-mai', title: 'Flash Sale cuối tuần: Camera Xiaomi C500 Pro chỉ còn 790.000đ', date: '03/04/2026', views: '4.210',
+                content: `
+                    <p class="lead fw-medium text-light">Tin vui cho các tín đồ công nghệ! Trong 48 giờ cuối tuần này, SmartHome xả kho Flash Sale mẫu camera quốc dân Xiaomi C500 Pro với mức giá không tưởng.</p>
+                    <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&q=80" alt="Flash sale">
+                    <h2>Chi tiết sản phẩm Xiaomi C500 Pro</h2>
+                    <p>- Độ phân giải 3K (5 Megapixel) siêu nét, nhìn rõ mặt người từ khoảng cách 10m.<br>- Tích hợp chip AI phát hiện tiếng khóc trẻ em và theo dõi chuyển động thú cưng.<br>- Chip bảo mật MJA1 mã hóa toàn bộ dữ liệu, chống hacker tuyệt đối.</p>
+                    <h2>Cách thức nhận ưu đãi</h2>
+                    <p>Chương trình chỉ diễn ra từ 00:00 Thứ 7 đến 23:59 Chủ Nhật tuần này. Vui lòng thêm sản phẩm vào giỏ hàng và sử dụng mã <strong>FLASH500</strong> để được giảm trực tiếp về giá 790.000đ (Giá gốc: 1.190.000đ).</p>
+                `
+            },
+            '5': {
+                tag: '⭐ Review', tagClass: 'tag-review', title: 'Philips Hue vs Yeelight: Bộ đèn thông minh nào đáng tiền hơn?', date: '02/04/2026', views: '1.876',
+                content: `
+                    <p class="lead fw-medium text-light">Bạn đang phân vân giữa biểu tượng của sự xa xỉ (Philips Hue) và ông vua phân khúc giá rẻ (Yeelight)? Bài viết này sẽ giúp bạn đưa ra quyết định chính xác.</p>
+                    <img src="https://images.unsplash.com/photo-1558089687-db0f4e53053c?w=800&q=80" alt="Smart light">
+                    <h2>1. Chất lượng ánh sáng</h2>
+                    <p>Philips Hue (giá khoảng 1.5 triệu/bóng) cho khả năng tái tạo màu sắc mượt mà, chuyển dải màu Gradient không bị khựng và tuổi thọ cực cao. Trong khi đó Yeelight (khoảng 300k/bóng) lại có độ sáng tối đa ấn tượng hơn, nhưng màu sắc ở dải xanh lá/tím không được sâu như Hue.</p>
+                    <h2>2. Khả năng đồng bộ</h2>
+                    <p>Philips Hue kết hợp hoàn hảo với Spotify và màn hình máy tính, tạo ra hiệu ứng nháy theo nhạc cực kỳ đỉnh cao qua app Hue Sync. Yeelight cũng có đồng bộ Razer Chroma nhưng trải nghiệm không mượt mà bằng.</p>
+                    <p><strong>Kết luận:</strong> Nếu tài chính dư dả, Hue là chân ái. Nhưng nếu muốn smart hóa toàn bộ ngôi nhà với chi phí tiết kiệm, Yeelight là lựa chọn hoàn hảo.</p>
+                `
+            },
+            '6': {
+                tag: '📰 Tin tức', tagClass: 'tag-tin-tuc', title: 'Xu hướng nhà thông minh 2026: AI điều khiển, tiết kiệm điện tự động', date: '01/04/2026', views: '987',
+                content: `
+                    <p class="lead fw-medium text-light">Giai đoạn phải tự tay cầm điện thoại bấm nút bật/tắt thiết bị đã qua. 2026 là năm của Ambient Intelligence (Trí thông minh môi trường xung quanh) - ngôi nhà tự biết bạn cần gì.</p>
+                    <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&q=80" alt="Smart trends">
+                    <h2>AI tự học thói quen người dùng</h2>
+                    <p>Các Hub trung tâm ngày nay được trang bị AI để phân tích thói quen sinh hoạt. Nó biết bạn thường đi làm về lúc 6h tối để bật trước máy lạnh ở 26 độ, đun nước nóng và kéo rèm cửa. Bạn không cần thiết lập bất cứ kịch bản thủ công nào.</p>
+                    <h2>Quản lý năng lượng thông minh</h2>
+                    <p>Với sự tăng giá điện năng, các ổ cắm và công tắc thông minh hiện nay đều đo được lượng điện tiêu thụ. AI sẽ tự động điều chỉnh công suất máy lạnh, tắt các thiết bị chờ khi không ai ở phòng, giúp giảm đến 25% hóa đơn tiền điện hàng tháng.</p>
+                `
+            },
+            '7': {
+                tag: '💡 Tư vấn', tagClass: 'tag-tu-van', title: 'Khóa cửa thông minh: Nên chọn mở bằng Vân tay hay FaceID?', date: '30/03/2026', views: '2.015',
+                content: `
+                    <p class="lead fw-medium text-light">Khóa cửa nhận diện khuôn mặt (FaceID) 3D đang dần thay thế khóa vân tay trên thị trường cao cấp. Vậy công nghệ nào thực sự an toàn và tiện lợi hơn cho gia đình bạn?</p>
+                    <img src="https://images.unsplash.com/photo-1558002038-1055907df827?w=800&q=80" alt="Smart lock">
+                    <h2>Ưu nhược điểm của Khóa Vân tay</h2>
+                    <p>Khóa vân tay đã rất phổ biến, giá thành rẻ, tốc độ nhận diện nhanh. Tuy nhiên, điểm yếu lớn nhất là với người già vân tay bị mờ, hoặc khi tay bạn đang ướt/dính dầu mỡ, khóa sẽ rất khó nhận diện.</p>
+                    <h2>Sự vượt trội của FaceID 3D</h2>
+                    <p>Công nghệ FaceID 3D dùng camera hồng ngoại quét chiều sâu khuôn mặt, không thể bị qua mặt bởi ảnh chụp hay mặt nạ. Bạn chỉ cần bước tới cửa, khóa sẽ tự mở, cực kỳ tiện lợi khi bạn đang xách đầy đồ đạc trên tay. Nó còn hoạt động tốt ngay cả trong đêm tối đen như mực.</p>
+                `
+            },
+            '8': {
+                tag: '⭐ Review', tagClass: 'tag-review', title: 'Đánh giá Google Nest Hub Max: Trợ lý đắc lực cho gia đình', date: '28/03/2026', views: '1.432',
+                content: `
+                    <p class="lead fw-medium text-light">Google Nest Hub Max với màn hình 10 inch và camera tích hợp là trung tâm điều khiển nhà thông minh hoàn hảo nhất mà Google từng tạo ra.</p>
+                    <img src="https://images.unsplash.com/photo-1543512214-318c7553f230?w=800&q=80" alt="Google Hub">
+                    <h2>Màn hình siêu lớn, hiển thị camera sắc nét</h2>
+                    <p>Điều tuyệt vời nhất của Nest Hub Max là dùng làm trung tâm quan sát camera an ninh. Màn hình 10 inch đủ lớn để bạn theo dõi cổng nhà hoặc phòng trẻ em khi đang nấu ăn trong bếp. Chất lượng loa cũng được nâng cấp mạnh, âm trầm rất tốt để nghe nhạc Spotify.</p>
+                    <h2>Face Match và Gestures</h2>
+                    <p>Camera trên thiết bị có thể nhận diện bạn là ai để hiển thị lịch trình cá nhân tương ứng (Face Match). Ngoài ra, khi tay bạn đang ướt, bạn chỉ cần giơ tay lên trước camera để dừng nhạc mà không cần chạm vào màn hình.</p>
+                `
+            },
+            '9': {
+                tag: '📰 Tin tức', tagClass: 'tag-tin-tuc', title: 'Giải pháp máy lọc không khí cho chung cư mùa nồm ẩm', date: '25/03/2026', views: '3.120',
+                content: `
+                    <p class="lead fw-medium text-light">Mùa nồm ở Miền Bắc không chỉ làm nhà cửa ướt át mà còn là tác nhân sinh ra nấm mốc, vi khuẩn lơ lửng trong không khí. Sự kết hợp giữa máy hút ẩm và lọc khí là điều sống còn.</p>
+                    <img src="https://images.unsplash.com/photo-1585501869383-747d9d6e42b8?w=800&q=80" alt="Air purifier">
+                    <h2>Chọn máy 2 trong 1 hay mua rời?</h2>
+                    <p>Máy lọc không khí kiêm hút ẩm giúp tiết kiệm không gian, nhưng thường bình chứa nước khá nhỏ. Nếu chung cư của bạn độ ẩm trên 80%, các chuyên gia khuyên dùng một máy hút ẩm chuyên dụng (như Sharp, Panasonic) và một máy lọc không khí HEPA riêng biệt (như Xiaomi, Coway) để tối đa hiệu năng.</p>
+                    <h2>Bật chế độ AI tự động</h2>
+                    <p>Các thiết bị đời mới có thể kết nối với cảm biến nhiệt ẩm độ trong nhà. Bạn chỉ cần cài đặt: "Khi độ ẩm trên 70%, tự bật máy hút ẩm". Hệ sinh thái SmartHome sẽ tự lo mọi thứ còn lại.</p>
+                `
+            },
+            '10': {
+                tag: '🎁 Khuyến mãi', tagClass: 'tag-khuyen-mai', title: 'Trọn bộ Combo Smarthome Dành Cho Căn Hộ 2 Phòng Ngủ - Giảm 15%', date: '20/03/2026', views: '5.600',
+                content: `
+                    <p class="lead fw-medium text-light">Chưa bao giờ việc biến căn hộ chung cư 2 phòng ngủ thành nhà thông minh lại dễ dàng và rẻ đến vậy. Trọn bộ combo thiết bị đang được giảm giá thẳng 15% chỉ trong tháng này.</p>
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80" alt="Smart home combo">
+                    <h2>Combo bao gồm những gì?</h2>
+                    <p>- 01 Bộ điều khiển trung tâm (Hub) Aqara M2<br>- 05 Công tắc thông minh âm tường (thay cho công tắc cơ cũ)<br>- 02 Cảm biến chuyển động gắn hành lang/WC<br>- 01 Khóa cửa vân tay thông minh tích hợp chuông hình<br>- 01 Bộ rèm cửa tự động cho phòng khách</p>
+                    <h2>Miễn phí nhân công lắp đặt</h2>
+                    <p>Khách hàng mua gói Combo này tại khu vực Hà Nội và TP.HCM sẽ được đội ngũ kỹ sư SmartHome thi công và cài đặt ngữ cảnh tự động hoàn toàn miễn phí. Đăng ký ngay để nhận ưu đãi!</p>
+                `
+            }
+        };
+
+        // Khi trang load, đọc URL để lấy ID bài viết
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+
+            // Nếu ID hợp lệ và có trong Mock Data
+            if (articleId && newsData[articleId]) {
+                const data = newsData[articleId];
+                
+                // Cập nhật DOM
+                document.getElementById('detail-tag').innerHTML = data.tag;
+                document.getElementById('detail-tag').className = 'article-tag ' + (data.tagClass || '');
+                document.getElementById('detail-title').innerText = data.title;
+                document.getElementById('detail-date').innerText = data.date;
+                document.getElementById('detail-views').innerText = data.views;
+                document.getElementById('detail-content').innerHTML = data.content;
+                
+                // Đổi cả title của trình duyệt
+                document.title = data.title + " - SmartHome";
+            } else {
+                // Nếu không có ID hoặc sai ID, hiện thông báo lỗi
+                document.getElementById('detail-title').innerText = 'Không tìm thấy bài viết';
+                document.getElementById('detail-content').innerHTML = `
+                    <div class="alert alert-warning text-center mt-4">
+                        <i class="fa-solid fa-triangle-exclamation fs-1 mb-3 d-block"></i>
+                        Xin lỗi, bài viết bạn tìm kiếm không tồn tại hoặc đã bị xóa.
+                        <br><br>
+                        <a href="news.html" class="btn btn-primary">Quay lại trang Tin tức</a>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

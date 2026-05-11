@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Khách hàng - SmartHome Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/admin-style.css">
+    <style>
+        .rank-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .rank-NORMAL { background: rgba(148, 163, 184, 0.1); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.2); }
+        .rank-SILVER { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border: 1px solid rgba(148, 163, 184, 0.3); } /* Bạc là xám sáng hơn tí */
+        .rank-GOLD   { background: rgba(245, 158, 11, 0.1); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.2); }
+        .rank-VIP    { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); }
+        
+        .spent-amount {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-house-signal"></i> <span>Smart<b>Admin</b></span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-item"><i class="fa-solid fa-gauge-high"></i> <span>Tổng quan Dashboard</span></a>
+            <a href="products.html" class="menu-item"><i class="fa-solid fa-box-open"></i> <span>Quản lý Sản phẩm</span></a>
+            <a href="orders.html" class="menu-item"><i class="fa-solid fa-cart-shopping"></i> <span>Quản lý Đơn hàng</span></a>
+            <a href="users.html" class="menu-item active"><i class="fa-solid fa-users"></i> <span>Khách hàng</span></a>
+            <a href="promotions.html" class="menu-item"><i class="fa-solid fa-tags"></i> <span>Khuyến mãi</span></a>
+
+            <a href="reports.html" class="menu-item"><i class="fa-solid fa-chart-pie"></i> <span>Báo cáo & Thống kê</span></a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logout-btn-action">
+                <i class="fa-solid fa-power-off"></i> <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <div class="main-content" id="main-content">
+        <header class="admin-header">
+            <div class="d-flex align-items-center gap-3">
+                <button class="toggle-sidebar-btn" id="toggle-btn"><i class="fa-solid fa-bars"></i></button>
+                <h4 class="m-0 font-weight-bold">Quản lý Khách hàng</h4>
+            </div>
+            <div class="header-profile">
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                    <i class="fa-solid fa-plus"></i> Thêm Người dùng
+                </button>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" alt="Admin" class="ms-3">
+            </div>
+        </header>
+
+        <div class="chart-box">
+            <!-- Filter Bar -->
+            <div class="row g-3 mb-4 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label text-secondary small fw-bold">Lọc theo Quyền</label>
+                    <select class="form-select" id="filterRole" style="background:#0f172a; border-color:rgba(255,255,255,0.1); color:#e0e0e0">
+                        <option value="">-- Tất cả quyền --</option>
+                        <option value="ADMIN">🛡️ Admin</option>
+                        <option value="USER">👤 Khách hàng</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-secondary small fw-bold">Lọc theo Hạng</label>
+                    <select class="form-select" id="filterRank" style="background:#0f172a; border-color:rgba(255,255,255,0.1); color:#e0e0e0">
+                        <option value="">-- Tất cả hạng --</option>
+                        <option value="NORMAL">🥉 Thành viên</option>
+                        <option value="SILVER">🥈 Bạc</option>
+                        <option value="GOLD">🥇 Vàng</option>
+                        <option value="VIP">💎 VIP</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label text-secondary small fw-bold">Sắp xếp ngày tạo</label>
+                    <select class="form-select" id="filterSort" style="background:#0f172a; border-color:rgba(255,255,255,0.1); color:#e0e0e0">
+                        <option value="desc">Mới nhất trước</option>
+                        <option value="asc">Cũ nhất trước</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-outline-secondary w-100" onclick="resetTableFilters()">
+                        <i class="fa-solid fa-rotate-left"></i> Reset bộ lọc
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="usersTable" class="table table-striped table-hover mt-3 w-100">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Họ và Tên</th>
+                            <th>Email</th>
+                            <th>Hạng & Chi tiêu</th>
+                            <th>Quyền (Role)</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── Modal Thêm Người dùng ─── -->
+    <div class="modal fade" id="createUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background:#1e293b; color:#e0e0e0; border:1px solid rgba(255,255,255,0.1)">
+                <div class="modal-header" style="border-color:rgba(255,255,255,0.1)">
+                    <h5 class="modal-title"><i class="fa-solid fa-user-plus me-2"></i>Thêm Người dùng mới</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Họ và tên <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="newUserFullName" placeholder="Nguyễn Văn A"
+                               style="background:#0f172a;border-color:rgba(255,255,255,0.1);color:#e0e0e0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Email <span class="text-danger">*</span></label>
+                        <input type="email" class="form-control" id="newUserEmail" placeholder="user@example.com"
+                               style="background:#0f172a;border-color:rgba(255,255,255,0.1);color:#e0e0e0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Mật khẩu <span class="text-danger">*</span></label>
+                        <input type="password" class="form-control" id="newUserPassword" placeholder="Tối thiểu 6 ký tự"
+                               style="background:#0f172a;border-color:rgba(255,255,255,0.1);color:#e0e0e0">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-secondary">Quyền (Role)</label>
+                        <select class="form-select" id="newUserRole"
+                                style="background:#0f172a;border-color:rgba(255,255,255,0.1);color:#e0e0e0">
+                            <option value="CUSTOMER">👤 Khách hàng (CUSTOMER)</option>
+                            <option value="ADMIN">🛡️ Quản trị viên (ADMIN)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-color:rgba(255,255,255,0.1)">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="btnCreateUser">
+                        <i class="fa-solid fa-user-plus"></i> Tạo tài khoản
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/admin.js"></script>
+
+    <script>
+        let dataTable;
+
+        // ─── FIX: Đúng cú pháp jQuery: $(document).ready() ─────
+        $(document).ready(function() {
+            initUsersTable();
+        });
+
+        function buildUsersUrl() {
+            let url = 'http://localhost:8080/api/v1/users?size=200';
+            const role = $('#filterRole').val();
+            const rank = $('#filterRank').val();
+            const sortDir = $('#filterSort').val();
+            if (role) url += '&role=' + role;
+            if (rank) url += '&rank=' + rank;
+            if (sortDir) url += '&sortDir=' + sortDir;
+            return url;
+        }
+
+        function initUsersTable() {
+            dataTable = $('#usersTable').DataTable({
+                ajax: {
+                    url: buildUsersUrl(),
+                    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') },
+                    dataSrc: function(json) {
+                        return json.data ? json.data.content || [] : [];
+                    },
+                    error: function(xhr) {
+                        if (xhr.status === 403) {
+                            showToast('error', 'Không có quyền xem danh sách người dùng!');
+                        } else {
+                            showToast('error', 'Lỗi tải dữ liệu: ' + xhr.status);
+                        }
+                    }
+                },
+                columns: [
+                    { 
+                        data: 'id', 
+                        width: '80px',
+                        render: function(data, type, row) {
+                            if (type === 'display') {
+                                return `<span class="fw-bold text-secondary">#USR-${data}</span>`;
+                            }
+                            return data; // Sắp xếp theo số ID thô
+                        }
+                    },
+                    {
+                        data: 'fullName',
+                        render: data => `<span class="fw-bold">${data || '-'}</span>`
+                    },
+                    { data: 'email' },
+                    {
+                        data: 'loyaltyRank',
+                        render: function(data, type, row) {
+                            const rank = data || 'NORMAL';
+                            const spent = row.totalSpent || 0;
+                            const formattedSpent = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(spent);
+                            
+                            const rankLabels = { 'NORMAL': 'Thành viên', 'SILVER': 'Bạc', 'GOLD': 'Vàng', 'VIP': 'VIP' };
+                            const rankIcons  = { 'NORMAL': '🏅', 'SILVER': '🥈', 'GOLD': '🥇', 'VIP': '👑' };
+                            
+                            return `
+                                <div class="rank-badge rank-${rank}">
+                                    <span>${rankIcons[rank]}</span> ${rankLabels[rank]}
+                                </div>
+                                <span class="spent-amount">${formattedSpent}</span>
+                            `;
+                        }
+                    },
+                    {
+                        data: 'role',
+                        render: function(data) {
+                            if (data === 'ADMIN') return '<span class="badge bg-danger">ADMIN</span>';
+                            if (data === 'CONSULTANT') return '<span class="badge bg-warning text-dark">CONSULTANT</span>';
+                            return '<span class="badge bg-secondary">CUSTOMER</span>';
+                        }
+                    },
+                    {
+                        data: 'status',
+                        render: function(data) {
+                            if (data === 'ACTIVE')
+                                return '<span class="text-success"><i class="fa-solid fa-circle-check"></i> Hoạt động</span>';
+                            if (data === 'BANNED')
+                                return '<span class="text-danger"><i class="fa-solid fa-ban"></i> Đã Khoá</span>';
+                            return '<span class="text-secondary"><i class="fa-solid fa-circle-xmark"></i> Không hoạt động</span>';
+                        }
+                    },
+                    {
+                        data: 'createdAt',
+                        render: function(data, type, row) {
+                            if (!data) return '-';
+                            if (type === 'sort' || type === 'type') {
+                                return data; // Dùng chuỗi ISO gốc để sắp xếp
+                            }
+                            return new Date(data).toLocaleDateString('vi-VN');
+                        }
+                    },
+                    {
+                        data: null,
+                        orderable: false,
+                        render: function(data, type, row) {
+                            // FIX: Thêm onclick handler cho nút Lock/Unlock
+                            const isBanned = row.status === 'BANNED';
+                            const lockBtn = isBanned
+                                ? `<button class="btn btn-outline-success btn-sm" onclick="activateUser(${row.id})" title="Mở khoá"><i class="fa-solid fa-unlock"></i></button>`
+                                : `<button class="btn btn-outline-warning btn-sm" onclick="banUser(${row.id})" title="Khoá TK"><i class="fa-solid fa-lock"></i></button>`;
+                            return `
+                                <div class="d-flex gap-1">
+                                    ${row.role !== 'ADMIN' ? lockBtn : '<span class="text-secondary small">Admin</span>'}
+                                </div>`;
+                        }
+                    }
+                ],
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/vi.json',
+                    search: 'Tìm kiếm:'
+                },
+                order: [[0, 'desc']],
+                pageLength: 15
+            });
+
+            // Sự kiện khi thay đổi filter Quyền và Hạng (cần reload từ server)
+            $('#filterRole, #filterRank').on('change', function() {
+                dataTable.ajax.url(buildUsersUrl()).load();
+            });
+
+            // Sự kiện sắp xếp (dùng DataTables API để sắp xếp client-side cho mượt)
+            $('#filterSort').on('change', function() {
+                const dir = $(this).val();
+                dataTable.order([6, dir]).draw();
+            });
+        }
+
+        function resetTableFilters() {
+            $('#filterRole').val('');
+            $('#filterRank').val('');
+            $('#filterSort').val('desc');
+            dataTable.order([6, 'desc']); // Reset về ngày tạo mới nhất
+            dataTable.ajax.url(buildUsersUrl()).load();
+        }
+
+        // ─── Khoá tài khoản ─────────────────────────────────────
+        function banUser(userId) {
+            Swal.fire({
+                title: 'Khoá tài khoản?',
+                text: 'Người dùng này sẽ không thể đăng nhập!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e94560',
+                background: '#1e293b', color: '#fff',
+                confirmButtonText: 'Khoá ngay',
+                cancelButtonText: 'Huỷ'
+            }).then(result => {
+                if (result.isConfirmed) {
+                    apiClient.put(`/users/${userId}/ban`)
+                        .then(() => {
+                            showToast('success', 'Đã khoá tài khoản!');
+                            dataTable.ajax.reload(null, false);
+                        })
+                        .catch(err => showToast('error', err.response?.data?.message || 'Lỗi khoá tài khoản'));
+                }
+            });
+        }
+
+        // ─── Mở khoá tài khoản ──────────────────────────────────
+        function activateUser(userId) {
+            apiClient.put(`/users/${userId}/activate`)
+                .then(() => {
+                    showToast('success', 'Đã mở khoá tài khoản!');
+                    dataTable.ajax.reload(null, false);
+                })
+                .catch(err => showToast('error', err.response?.data?.message || 'Lỗi mở khoá'));
+        }
+
+        // ─── Tạo người dùng mới (Admin) ─────────────────────────
+        document.getElementById('btnCreateUser').addEventListener('click', function() {
+            const fullName = document.getElementById('newUserFullName').value.trim();
+            const email    = document.getElementById('newUserEmail').value.trim();
+            const password = document.getElementById('newUserPassword').value.trim();
+            const role     = document.getElementById('newUserRole').value;
+
+            if (!fullName || !email || !password) {
+                showToast('warning', 'Vui lòng điền đầy đủ thông tin!');
+                return;
+            }
+
+            if (!email.toLowerCase().endsWith('@gmail.com')) {
+                showToast('warning', 'Email phải có đuôi @gmail.com');
+                return;
+            }
+
+            // Kiểm tra độ phức tạp: ít nhất 6 ký tự, 1 chữ, 1 số
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+            if (!passwordRegex.test(password)) {
+                showToast('warning', 'Mật khẩu phải có ít nhất 6 ký tự, bao gồm cả chữ và số');
+                return;
+            }
+
+            const btn = this;
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tạo...';
+            btn.disabled = true;
+
+            // Sử dụng đường dẫn tuyệt đối để tránh lỗi relative path
+            axios.post('http://localhost:8080/api/auth/admin/create-user', 
+                { fullName, email, password, role },
+                { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } }
+            )
+            .then(res => {
+                showToast('success', res.data?.message || 'Tạo tài khoản thành công!');
+                bootstrap.Modal.getInstance(document.getElementById('createUserModal')).hide();
+                // Reset form
+                document.getElementById('newUserFullName').value = '';
+                document.getElementById('newUserEmail').value = '';
+                document.getElementById('newUserPassword').value = '';
+                dataTable.ajax.reload(null, false);
+            })
+            .catch(err => {
+                const msg = err.response?.data?.message || 'Lỗi tạo tài khoản!';
+                showToast('error', msg);
+            })
+            .finally(() => {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            });
+        });
+    </script>
+</body>
+</html>

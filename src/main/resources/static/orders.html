@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử Đơn hàng - SmartHome</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: 15px;
+        }
+
+        .orders-container {
+            padding: 120px 0 80px 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, rgba(233, 69, 96, 0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(0, 204, 255, 0.03), transparent);
+        }
+
+        .page-header {
+            margin-bottom: 50px;
+            text-align: left;
+            position: relative;
+        }
+
+        .page-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--text-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .order-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px) scale(1.01);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(233, 69, 96, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .order-card:hover::before {
+            opacity: 1;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .order-info-main h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .order-id-tag {
+            font-family: monospace;
+            background: rgba(233, 69, 96, 0.1);
+            color: var(--accent-color);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .order-meta {
+            display: flex;
+            gap: 20px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .order-meta span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .badge-pending { background: rgba(255, 193, 7, 0.1); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.2); }
+        .badge-processing { background: rgba(13, 202, 240, 0.1); color: #0dcaf0; border: 1px solid rgba(13, 202, 240, 0.2); }
+        .badge-shipping { background: rgba(13, 110, 253, 0.1); color: #0d6efd; border: 1px solid rgba(13, 110, 253, 0.2); }
+        .badge-delivered { background: rgba(25, 135, 84, 0.1); color: #198754; border: 1px solid rgba(25, 135, 84, 0.2); }
+        .badge-cancelled { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
+
+        .order-items-preview {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px 0;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .preview-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            background: #fff;
+            padding: 5px;
+            object-fit: contain;
+            border: 1px solid var(--glass-border);
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .total-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .btn-view-detail {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-view-detail:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateX(5px);
+        }
+
+        .btn-confirm-order {
+            background: #198754;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-right: 15px;
+        }
+
+        .btn-confirm-order:hover {
+            background: #157347;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(25, 135, 84, 0.3);
+        }
+
+        .btn-cancel-order {
+            background: rgba(220, 53, 69, 0.1);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            color: #dc3545;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel-order:hover {
+            background: #dc3545;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        /* Modal Redesign */
+        .modal-content {
+            background: #121225;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .info-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .order-details-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .detail-item img {
+            width: 70px;
+            height: 70px;
+            border-radius: 12px;
+            background: #fff;
+            padding: 8px;
+            object-fit: contain;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .empty-state i {
+            font-size: 5rem;
+            background: linear-gradient(135deg, var(--accent-color), #50c8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 25px;
+            opacity: 0.5;
+        }
+
+        /* Loading Spinner */
+        .loader-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 0;
+        }
+
+        .custom-loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-top: 3px solid var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fa-solid fa-house-signal text-accent me-2"></i>Smart<span>Home</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <a href="cart.html" class="nav-icon position-relative">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+                <a href="profile.html" class="nav-icon text-accent"><i class="fa-solid fa-user"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="orders-container">
+        <div class="container">
+            <div class="page-header animate-fade-in">
+                <h2>Lịch sử Đơn hàng</h2>
+                <p class="text-secondary">Theo dõi trạng thái và quản lý thiết kế thông minh của bạn</p>
+            </div>
+            
+            <div id="orders-list">
+                <div class="loader-container">
+                    <div class="custom-loader"></div>
+                    <p class="mt-3 text-secondary">Đang truy xuất dữ liệu...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết Đơn Hàng -->
+    <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalOrderTitle">Chi tiết Đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p class="text-secondary mb-1">Thông tin giao hàng:</p>
+                            <div class="p-3 rounded" style="background: rgba(255,255,255,0.02)">
+                                <strong id="detailName" class="d-block text-white"></strong>
+                                <span id="detailPhone" class="d-block text-secondary small"></span>
+                                <span id="detailAddress" class="d-block text-secondary small"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                            <p class="text-secondary mb-1">Trạng thái:</p>
+                            <div id="detailStatus"></div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="text-uppercase text-secondary mt-4 mb-3 border-bottom border-secondary pb-2" style="font-size: 0.8rem">Sản phẩm đã đặt</h6>
+                    <div id="orderItemsList">
+                        <!-- Items injected here -->
+                    </div>
+                    
+                    <div class="mt-4 pt-3 border-top" style="border-color: rgba(255,255,255,0.1) !important;">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">Tạm tính (Sản phẩm):</span>
+                            <span class="text-white" id="detailSubtotal">0 đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2" id="detailVoucherRow" style="display: none !important;">
+                            <span class="text-secondary">Giảm giá Voucher:</span>
+                            <span class="text-danger" id="detailVoucher">-0 đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2" id="detailRankRow" style="display: none !important;">
+                            <span class="text-secondary">Ưu đãi hạng <span id="detailRankName" class="badge bg-primary ms-1" style="font-size: 0.6rem"></span>:</span>
+                            <span class="text-danger" id="detailRank">-0 đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="text-secondary">Phí vận chuyển:</span>
+                            <span class="text-white" id="detailShipping">0 đ</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-secondary border-opacity-25">
+                            <h5 class="m-0 text-white">Tổng thanh toán:</h5>
+                            <h4 class="m-0 text-accent fw-bold" id="detailTotal"></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    
+    <script>
+        const API_BASE = 'http://localhost:8080/api/v1';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('token')) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            loadMyOrders();
+        });
+
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'PENDING': return '<span class="status-badge badge-pending">Chờ Xác Nhận</span>';
+                case 'PROCESSING': return '<span class="status-badge badge-processing">Đang Xử Lý</span>';
+                case 'SHIPPING': return '<span class="status-badge badge-shipping">Đang Giao</span>';
+                case 'DELIVERED': return '<span class="status-badge badge-delivered">Đã Nhận Xong</span>';
+                case 'CANCELLED': return '<span class="status-badge badge-cancelled">Đã Hủy</span>';
+                default: return `<span class="status-badge bg-secondary">${status}</span>`;
+            }
+        }
+
+        async function loadMyOrders() {
+            try {
+                const res = await axios.get(`${API_BASE}/orders/my?size=100`, {
+                    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                });
+                
+                const orders = res.data.data.content;
+                const container = document.getElementById('orders-list');
+                
+                if (!orders || orders.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state animate-fade-in">
+                            <i class="fa-solid fa-box-archive"></i>
+                            <h3 class="text-white">Chưa có đơn hàng</h3>
+                            <p class="text-secondary">Có vẻ như bạn chưa bắt đầu hành trình mua sắm của mình.</p>
+                            <a href="products.html" class="btn btn-primary mt-4 px-5">Bắt đầu mua sắm ngay</a>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = '';
+                orders.forEach((order, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'order-card animate-fade-in';
+                    card.style.animationDelay = `${index * 0.1}s`;
+                    
+                    // Tạo preview ảnh sản phẩm
+                    let imagesHtml = '';
+                    if (order.items && order.items.length > 0) {
+                        order.items.slice(0, 5).forEach(item => {
+                            const imgUrl = item.productImage && item.productImage.startsWith('http') 
+                                ? item.productImage 
+                                : (item.productImage ? `images/products/${item.productImage}` : 'images/placeholder.png');
+                            imagesHtml += `<img src="${imgUrl}" class="preview-img" onerror="this.src='images/placeholder.png'">`;
+                        });
+                        if (order.items.length > 5) {
+                            imagesHtml += `<div class="preview-img d-flex align-items-center justify-content-center bg-dark text-white small">+${order.items.length - 5}</div>`;
+                        }
+                    }
+
+                    card.innerHTML = `
+                        <div class="order-header">
+                            <div class="order-info-main">
+                                <h4>Đơn hàng <span class="order-id-tag">#ORD-${order.id}</span></h4>
+                                <div class="order-meta">
+                                    <span><i class="fa-regular fa-calendar"></i> ${new Date(order.createdAt).toLocaleDateString('vi-VN')}</span>
+                                    <span><i class="fa-regular fa-clock"></i> ${new Date(order.createdAt).toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'})}</span>
+                                </div>
+                            </div>
+                            ${getStatusBadge(order.status)}
+                        </div>
+                        
+                        <div class="order-items-preview">
+                            ${imagesHtml || '<p class="text-secondary m-0 small">Không có dữ liệu sản phẩm</p>'}
+                        </div>
+                        
+                        <div class="order-footer">
+                            <div>
+                                <div class="total-label">Tổng thanh toán</div>
+                                <div class="total-value">${formatCurrency(order.finalAmount)}</div>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                ${order.status === 'PENDING' ? `
+                                    <button class="btn-cancel-order me-3" onclick="cancelOrder(${order.id})">
+                                        <i class="fa-solid fa-xmark me-2"></i> Hủy đơn
+                                    </button>
+                                ` : ''}
+                                ${order.status === 'SHIPPING' ? `
+                                    <button class="btn-confirm-order" onclick="confirmOrder(${order.id})">
+                                        <i class="fa-solid fa-check-double me-2"></i> Xác nhận đã nhận hàng
+                                    </button>
+                                ` : ''}
+                                <button class="btn-view-detail" onclick='showOrderDetail(${JSON.stringify(order).replace(/'/g, "&apos;")})'>
+                                    Chi tiết <i class="fa-solid fa-chevron-right ms-1 small"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error(error);
+                document.getElementById('orders-list').innerHTML = `
+                    <div class="alert alert-danger bg-danger bg-opacity-10 border-danger border-opacity-20 text-danger rounded-4 p-4 text-center">
+                        <i class="fa-solid fa-triangle-exclamation mb-2 fs-3"></i>
+                        <p class="m-0">Không thể kết nối với máy chủ. Vui lòng thử lại sau.</p>
+                    </div>`;
+            }
+        }
+
+        function showOrderDetail(order) {
+            document.getElementById('modalOrderTitle').innerHTML = `Chi tiết Đơn hàng <span class="order-id-tag ms-2">#ORD-${order.id}</span>`;
+            document.getElementById('detailName').textContent = order.customerName;
+            document.getElementById('detailPhone').textContent = order.phone;
+            document.getElementById('detailAddress').textContent = order.address;
+            document.getElementById('detailStatus').innerHTML = getStatusBadge(order.status);
+            document.getElementById('detailTotal').textContent = formatCurrency(order.finalAmount);
+            
+            // Tính toán chi tiết breakdown
+            const subtotal = order.totalAmount || 0;
+            const shipping = order.shippingFee || 0;
+            const loyaltyDiscount = order.loyaltyDiscountAmount || 0;
+            const totalDiscount = order.discountAmount || 0;
+            const voucherDiscount = totalDiscount - loyaltyDiscount;
+
+            document.getElementById('detailSubtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('detailShipping').textContent = formatCurrency(shipping);
+
+            // Xử lý hiển thị Voucher row
+            const voucherRow = document.getElementById('detailVoucherRow');
+            if (voucherDiscount > 0) {
+                voucherRow.style.display = 'flex';
+                document.getElementById('detailVoucher').textContent = `-${formatCurrency(voucherDiscount)}`;
+            } else {
+                voucherRow.style.display = 'none';
+            }
+
+            // Xử lý hiển thị Loyalty Rank row
+            const rankRow = document.getElementById('detailRankRow');
+            if (loyaltyDiscount > 0) {
+                rankRow.style.display = 'flex';
+                document.getElementById('detailRankName').textContent = order.loyaltyRankApplied || 'MEMBERSHIP';
+                document.getElementById('detailRank').textContent = `-${formatCurrency(loyaltyDiscount)}`;
+            } else {
+                rankRow.style.display = 'none';
+            }
+            
+            const itemsList = document.getElementById('orderItemsList');
+            itemsList.innerHTML = '<div class="order-details-list">';
+            
+            if (order.items && order.items.length > 0) {
+                order.items.forEach(item => {
+                    const imgUrl = item.productImage && item.productImage.startsWith('http') 
+                        ? item.productImage 
+                        : (item.productImage ? `images/products/${item.productImage}` : 'images/placeholder.png');
+                        
+                    itemsList.innerHTML += `
+                        <div class="detail-item">
+                            <img src="${imgUrl}" alt="${item.productName}" onerror="this.src='images/placeholder.png'">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1 text-white">${item.productName}</h6>
+                                <div class="text-secondary small">Số lượng: ${item.quantity} x ${formatCurrency(item.unitPrice)}</div>
+                            </div>
+                            <div class="fw-bold text-white">${formatCurrency(item.subtotal)}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                itemsList.innerHTML = '<p class="text-secondary text-center py-4">Dữ liệu sản phẩm không khả dụng.</p>';
+            }
+            
+            itemsList.innerHTML += '</div>';
+            
+            const modal = new bootstrap.Modal(document.getElementById('orderDetailModal'));
+            modal.show();
+        }
+
+        async function confirmOrder(orderId) {
+            const result = await Swal.fire({
+                title: 'Xác nhận nhận hàng?',
+                text: "Bạn xác nhận đã nhận được sản phẩm thành công?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#198754',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đúng, đã nhận!',
+                cancelButtonText: 'Hủy',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    await axios.post(`${API_BASE}/orders/${orderId}/confirm-received`, {}, {
+                        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                    });
+                    
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Cảm ơn bạn đã mua hàng tại SmartHome.',
+                        icon: 'success',
+                        background: '#1a1a2e',
+                        color: '#fff'
+                    });
+                    
+                    loadMyOrders();
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: error.response?.data?.message || 'Không thể xác nhận đơn hàng lúc này.',
+                        icon: 'error',
+                        background: '#1a1a2e',
+                        color: '#fff'
+                    });
+                }
+            }
+        }
+
+        async function cancelOrder(orderId) {
+            const result = await Swal.fire({
+                title: 'Hủy đơn hàng?',
+                text: "Bạn có chắc chắn muốn hủy đơn hàng này không?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đúng, hủy đơn!',
+                cancelButtonText: 'Quay lại',
+                background: '#1a1a2e',
+                color: '#fff'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    await axios.post(`${API_BASE}/orders/${orderId}/cancel`, {}, {
+                        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                    });
+                    
+                    Swal.fire({
+                        title: 'Đã hủy!',
+                        text: 'Đơn hàng của bạn đã được hủy thành công.',
+                        icon: 'success',
+                        background: '#1a1a2e',
+                        color: '#fff'
+                    });
+                    
+                    loadMyOrders();
+                } catch (error) {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: error.response?.data?.message || 'Không thể hủy đơn hàng lúc này.',
+                        icon: 'error',
+                        background: '#1a1a2e',
+                        color: '#fff'
+                    });
+                }
+            }
+        }
+    </script>
+</body>
+</html>

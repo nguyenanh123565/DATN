@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ của tôi - SmartHome</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: 15px;
+        }
+
+        .profile-container {
+            padding: 120px 0 80px 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top right, rgba(233, 69, 96, 0.05), transparent),
+                        radial-gradient(circle at bottom left, rgba(0, 204, 255, 0.03), transparent);
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 30px;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .profile-sidebar {
+            text-align: center;
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-color);
+            padding: 5px;
+            background: var(--bg-card);
+            box-shadow: 0 10px 25px rgba(233, 69, 96, 0.3);
+        }
+
+        .role-badge {
+            background: var(--accent-color);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .profile-nav {
+            margin-top: 30px;
+            text-align: left;
+        }
+
+        .nav-item-custom {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .nav-item-custom:hover, .nav-item-custom.active {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
+
+        .nav-item-custom.active {
+            color: var(--accent-color);
+            background: rgba(233, 69, 96, 0.1);
+        }
+
+        /* Form styling */
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-control {
+            background: #ffffff !important;
+            border: 1px solid var(--glass-border) !important;
+            color: #212529 !important;
+            border-radius: 12px !important;
+            padding: 12px 15px !important;
+            transition: all 0.3s !important;
+        }
+
+        .form-control:focus {
+            background: #ffffff !important;
+            border-color: var(--accent-color) !important;
+            color: #212529 !important;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.1) !important;
+        }
+
+        .form-control:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            background: #f8f9fa !important;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            color: var(--accent-color);
+        }
+
+        .save-btn {
+            background: var(--accent-color);
+            border: none;
+            color: #fff;
+            padding: 12px 30px;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .save-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+        }
+
+        .save-btn:active {
+            transform: translateY(0);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* ── Loyalty Rank Card ── */
+        .loyalty-card {
+            border-radius: 18px;
+            padding: 20px 24px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .loyalty-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            opacity: 0.12;
+            border-radius: inherit;
+        }
+        .loyalty-card.rank-NORMAL  { background: rgba(120,120,140,0.18); border: 1px solid rgba(160,160,180,0.25); }
+        .loyalty-card.rank-SILVER  { background: rgba(192,192,220,0.18); border: 1px solid rgba(192,192,220,0.5);  }
+        .loyalty-card.rank-GOLD    { background: rgba(255,195,30,0.15);  border: 1px solid rgba(255,195,30,0.45);  }
+        .loyalty-card.rank-VIP     { background: rgba(233,69,96,0.15);   border: 1px solid rgba(233,69,96,0.5);    }
+
+        .rank-badge-big {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 18px; border-radius: 50px;
+            font-weight: 800; font-size: 0.95rem; letter-spacing: 1.5px;
+            text-transform: uppercase; margin-bottom: 4px;
+        }
+        .rank-NORMAL  .rank-badge-big { background: rgba(150,150,170,0.25); color: #b0b0c8; }
+        .rank-SILVER  .rank-badge-big { background: rgba(192,192,220,0.3);  color: #d0d0f0; }
+        .rank-GOLD    .rank-badge-big { background: rgba(255,195,30,0.2);   color: #ffc31e; }
+        .rank-VIP     .rank-badge-big { background: rgba(233,69,96,0.25);   color: #ff6b8a; }
+
+        .loyalty-progress {
+            height: 8px; border-radius: 6px;
+            background: rgba(255,255,255,0.08);
+            overflow: hidden; margin: 12px 0 6px;
+        }
+        .loyalty-progress-bar {
+            height: 100%; border-radius: 6px;
+            transition: width 1s cubic-bezier(.4,0,.2,1);
+        }
+        .rank-NORMAL .loyalty-progress-bar  { background: linear-gradient(90deg, #8888aa, #aaaacc); }
+        .rank-SILVER .loyalty-progress-bar  { background: linear-gradient(90deg, #9999cc, #d0d0f0); }
+        .rank-GOLD   .loyalty-progress-bar  { background: linear-gradient(90deg, #f5a623, #ffc31e); }
+        .rank-VIP    .loyalty-progress-bar  { background: linear-gradient(90deg, #e94560, #ff6b8a); }
+    </style>
+</head>
+<body class="dark-theme">
+
+    <!-- Header / Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fa-solid fa-house-signal text-accent me-2"></i>Smart<span>Home</span>
+            </a>
+            <div class="d-flex align-items-center gap-3">
+                <a href="cart.html" class="nav-icon position-relative">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </a>
+                <a href="profile.html" class="nav-icon text-accent active"><i class="fa-solid fa-user"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="container">
+            <div class="row g-4">
+                <!-- Sidebar -->
+                <div class="col-lg-4 animate-fade-in">
+                    <div class="glass-card profile-sidebar">
+                        <div class="avatar-container">
+                            <img id="avatarImg" src="https://ui-avatars.com/api/?name=User&background=e94560&color=fff&size=200" alt="Avatar" class="profile-avatar">
+                        </div>
+                        <h3 id="displayFullName" class="text-white mb-1">...</h3>
+                        <p id="displayEmail" class="text-secondary small mb-3">...</p>
+                        <div id="displayRole" class="role-badge">Khách hàng</div>
+
+                        <!-- Loyalty Rank Card -->
+                        <div id="loyaltyCard" class="loyalty-card rank-NORMAL">
+                            <div class="rank-badge-big">
+                                <span id="rankIcon">⭐</span>
+                                <span id="rankLabel">NORMAL</span>
+                            </div>
+                            <div class="text-white-50 small" id="discountLine">Không có ưu đãi hạng</div>
+                            <div class="loyalty-progress">
+                                <div class="loyalty-progress-bar" id="rankProgressBar" style="width:0%"></div>
+                            </div>
+                            <div class="d-flex justify-content-between" style="font-size:0.75rem; color:rgba(255,255,255,0.45);">
+                                <span id="spentLabel">Đã chi: 0đ</span>
+                                <span id="nextRankLabel"></span>
+                            </div>
+                        </div>
+
+                        <div class="profile-nav">
+                            <div id="btn-info" class="nav-item-custom active" onclick="switchTab('info')">
+                                <i class="fa-solid fa-user-gear"></i> Thông tin cá nhân
+                            </div>
+                            <div class="nav-item-custom" onclick="location.href='orders.html'">
+                                <i class="fa-solid fa-box-open"></i> Lịch sử đơn hàng
+                            </div>
+                            <div id="btn-password" class="nav-item-custom" onclick="switchTab('password')">
+                                <i class="fa-solid fa-shield-halved"></i> Đổi mật khẩu
+                            </div>
+                            <div class="nav-item-custom text-danger mt-4" onclick="logout()">
+                                <i class="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="col-lg-8 animate-fade-in" style="animation-delay: 0.2s">
+                    <!-- Tab: Thông tin cá nhân -->
+                    <div id="tab-info" class="glass-card">
+                        <h4 class="section-title"><i class="fa-solid fa-address-card"></i> Hồ sơ của tôi</h4>
+                        <form id="profileForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Họ và Tên</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="Nhập họ tên...">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email (Không thể sửa)</label>
+                                    <input type="email" class="form-control" id="email" disabled>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Số điện thoại</label>
+                                    <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại...">
+                                </div>
+
+                                <div class="col-12 mt-2">
+                                    <button type="submit" class="save-btn" id="updateBtn">
+                                        <i class="fa-solid fa-floppy-disk me-2"></i> Lưu thay đổi
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Tab: Đổi mật khẩu (Ẩn mặc định) -->
+                    <div id="tab-password" class="glass-card d-none">
+                        <h4 class="section-title"><i class="fa-solid fa-key"></i> Bảo mật tài khoản</h4>
+                        <form id="passwordForm">
+                            <div class="mb-3">
+                                <label class="form-label">Mật khẩu hiện tại</label>
+                                <input type="password" class="form-control" id="oldPassword" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <input type="password" class="form-control" id="newPassword" required>
+                            </div>
+                            <div class="mb-4">
+                                <label class="form-label">Xác nhận mật khẩu mới</label>
+                                <input type="password" class="form-control" id="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="save-btn">
+                                <i class="fa-solid fa-lock me-2"></i> Cập nhật mật khẩu
+                            </button>
+                        </form>
+                        <div class="mt-4 text-center">
+                            <button class="btn btn-link text-secondary" onclick="switchTab('info')">Quay lại thông tin cá nhân</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        const USER_API = 'http://localhost:8080/api/v1/users';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                window.location.href = 'auth.html';
+                return;
+            }
+
+            loadProfile();
+
+            // Handle Update Profile
+            document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const updateBtn = document.getElementById('updateBtn');
+                updateBtn.disabled = true;
+                updateBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Đang lưu...';
+
+                try {
+                    const data = {
+                        fullName: document.getElementById('fullName').value,
+                        phone: document.getElementById('phone').value,
+
+                    };
+
+                    await axios.put(`${USER_API}/me`, data, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    showToast('success', 'Đã cập nhật hồ sơ thành công!');
+                    loadProfile(); // Refresh UI
+                } catch (err) {
+                    console.error(err);
+                    showToast('error', err.response?.data?.message || 'Không thể cập nhật hồ sơ');
+                } finally {
+                    updateBtn.disabled = false;
+                    updateBtn.innerHTML = '<i class="fa-solid fa-floppy-disk me-2"></i> Lưu thay đổi';
+                }
+            });
+
+            // Handle Change Password
+            document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const newPass = document.getElementById('newPassword').value;
+                const confirmPass = document.getElementById('confirmPassword').value;
+
+                if (newPass !== confirmPass) {
+                    showToast('warning', 'Mật khẩu xác nhận không khớp');
+                    return;
+                }
+
+                // Kiểm tra độ phức tạp: ít nhất 6 ký tự, 1 chữ, 1 số
+                const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d).{6,}$/;
+                if (!passwordRegex.test(newPass)) {
+                    showToast('warning', 'Mật khẩu phải có ít nhất 6 ký tự, bao gồm cả chữ và số');
+                    return;
+                }
+
+                try {
+                    await axios.post(`${USER_API}/me/change-password`, {
+                        currentPassword: document.getElementById('oldPassword').value,
+                        newPassword: newPass,
+                        confirmPassword: confirmPass
+                    }, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+
+                    showToast('success', 'Đổi mật khẩu thành công!');
+                    document.getElementById('passwordForm').reset();
+                    switchTab('info');
+                } catch (err) {
+                    showToast('error', err.response?.data?.message || 'Mật khẩu hiện tại không đúng');
+                }
+            });
+        });
+
+        async function loadProfile() {
+            try {
+                const token = localStorage.getItem('token');
+                const res = await axios.get(`${USER_API}/me`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                const user = res.data.data;
+                
+                // Fill static fields
+                document.getElementById('displayFullName').innerText = user.fullName || 'Người dùng';
+                document.getElementById('displayEmail').innerText = user.email;
+                document.getElementById('displayRole').innerText = user.role === 'ADMIN' ? 'Quản trị viên' : 'Khách hàng';
+                document.getElementById('avatarImg').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.fullName || 'User')}&background=e94560&color=fff&size=200`;
+                
+                // Fill inputs
+                document.getElementById('fullName').value = user.fullName || '';
+                document.getElementById('email').value = user.email;
+                document.getElementById('phone').value = user.phone || '';
+
+                
+                // Save to localStorage for other pages
+                localStorage.setItem('fullName', user.fullName);
+
+                // ── Loyalty Rank display ──────────────────────────────────
+                renderLoyaltyCard(user);
+
+            } catch (err) {
+                console.error('Fetch profile failed', err);
+                if (err.response?.status === 401) logout();
+            }
+        }
+
+        function renderLoyaltyCard(user) {
+            const rank        = user.loyaltyRank  || 'NORMAL';
+            const totalSpent  = user.totalSpent   || 0;
+            const discRate    = user.loyaltyDiscountRate || 0;
+            const nextThresh  = user.nextRankThreshold;  // null nếu VIP
+
+            const rankIcons  = { NORMAL:'🏅', SILVER:'🥈', GOLD:'🥇', VIP:'👑' };
+            const rankNames  = { NORMAL:'Thành viên', SILVER:'Bạc', GOLD:'Vàng', VIP:'VIP' };
+
+            // Badge + card theme
+            const card = document.getElementById('loyaltyCard');
+            card.className = `loyalty-card rank-${rank}`;
+            document.getElementById('rankIcon').innerText  = rankIcons[rank]  || '⭐';
+            document.getElementById('rankLabel').innerText = rankNames[rank] || rank;
+
+            // Discount line
+            const discPct = Math.round(discRate * 100);
+            document.getElementById('discountLine').innerText =
+                discPct > 0 ? `Ưu đãi hạng: giảm ${discPct}% đơn tiếp theo` : 'Chưa có ưu đãi hạng thành viên';
+
+            // Progress bar
+            const fmt = (n) => new Intl.NumberFormat('vi-VN').format(Math.round(n)) + 'đ';
+            let pct = 100;
+            let nextLabel = '🏆 Đã đạt hạng cao nhất!';
+
+            // Ngưỡng hạng bắt đầu tính từ
+            const floorMap = { NORMAL: 0, SILVER: 30_000_000, GOLD: 50_000_000, VIP: 100_000_000 };
+            const floor = floorMap[rank] || 0;
+
+            if (nextThresh != null) {
+                const range = nextThresh - floor;
+                const done  = totalSpent - floor;
+                pct = Math.min(100, Math.max(0, Math.round(done / range * 100)));
+                const remaining = nextThresh - totalSpent;
+                nextLabel = remaining > 0
+                    ? `Còn ${fmt(remaining)} để lên hạng tiếp`
+                    : 'Sắp lên hạng!';
+            }
+
+            document.getElementById('rankProgressBar').style.width = pct + '%';
+            document.getElementById('spentLabel').innerText  = `Đã chi: ${fmt(totalSpent)}`;
+            document.getElementById('nextRankLabel').innerText = nextLabel;
+        }
+
+        function switchTab(tab) {
+            if (tab === 'info') {
+                document.getElementById('tab-info').classList.remove('d-none');
+                document.getElementById('tab-password').classList.add('d-none');
+                document.getElementById('btn-info').classList.add('active');
+                document.getElementById('btn-password').classList.remove('active');
+            } else {
+                document.getElementById('tab-info').classList.add('d-none');
+                document.getElementById('tab-password').classList.remove('d-none');
+                document.getElementById('btn-info').classList.remove('active');
+                document.getElementById('btn-password').classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>

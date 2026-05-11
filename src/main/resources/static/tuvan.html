@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tư vấn mua hàng - SmartHome</title>
+    <meta name="description" content="Tư vấn chọn mua thiết bị nhà thông minh phù hợp nhất với nhu cầu và ngân sách của bạn. Chuyên gia SmartHome hỗ trợ 24/7.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Breadcrumb */
+        .breadcrumb-bar {
+            background: var(--bg-card);
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.88rem;
+        }
+        .breadcrumb-bar a { color: var(--text-secondary); }
+        .breadcrumb-bar a:hover { color: var(--accent-color); }
+        .breadcrumb-bar .current { color: var(--accent-color); font-weight: 500; }
+
+        /* Hero Tư vấn */
+        .tuvan-hero {
+            background: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+            padding: 70px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .tuvan-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(233,69,96,0.08) 0%, transparent 60%);
+        }
+        .tuvan-hero h1 { font-size: 2.5rem; }
+        .tuvan-hero p { color: var(--text-secondary); max-width: 600px; margin: 0 auto 30px; }
+
+        /* Guide Cards */
+        .guide-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            height: 100%;
+            transition: all 0.3s;
+        }
+        .guide-card:hover {
+            border-color: rgba(233,69,96,0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .guide-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, rgba(233,69,96,0.2), rgba(15,52,96,0.5));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+        .guide-card h4 { font-size: 1.1rem; margin-bottom: 12px; }
+        .guide-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+        .guide-card .btn { margin-top: 15px; }
+
+        /* Budget Guide */
+        .budget-table {
+            background: var(--bg-card);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+        }
+        .budget-row {
+            display: flex;
+            align-items: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 16px;
+            transition: background 0.2s;
+        }
+        .budget-row:last-child { border-bottom: none; }
+        .budget-row:hover { background: rgba(255,255,255,0.03); }
+        .budget-range {
+            width: 160px;
+            font-weight: 700;
+            color: var(--accent-color);
+            flex-shrink: 0;
+        }
+        .budget-products { flex: 1; color: var(--text-secondary); font-size: 0.9rem; }
+        .budget-tag {
+            background: rgba(233,69,96,0.1);
+            color: var(--accent-color);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* FAQ */
+        .accordion-button {
+            background: var(--bg-card) !important;
+            color: var(--text-primary) !important;
+            font-weight: 500;
+            box-shadow: none !important;
+        }
+        .accordion-button:not(.collapsed) {
+            background: var(--bg-light) !important;
+            color: var(--accent-color) !important;
+        }
+        .accordion-button::after { filter: invert(1); }
+        .accordion-body {
+            background: var(--bg-main);
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+        .accordion-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color) !important;
+            margin-bottom: 8px;
+            border-radius: 10px !important;
+            overflow: hidden;
+        }
+
+        /* Contact Box */
+        .contact-card {
+            background: linear-gradient(135deg, var(--accent-color), #0f3460);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            color: #fff;
+        }
+        .contact-card h3 { font-size: 1.6rem; margin-bottom: 12px; }
+        .contact-option {
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: background 0.2s;
+        }
+        .contact-option:hover { background: rgba(255,255,255,0.25); }
+        .contact-option i { font-size: 2rem; margin-bottom: 10px; }
+
+        /* AI Chat box inline */
+        .inline-ai-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        .inline-ai-header {
+            background: linear-gradient(135deg, #6c63ff 0%, #48cae4 100%);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+        .inline-ai-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #f8f9fa;
+        }
+        .inline-ai-input {
+            border-top: 1px solid var(--border-color);
+            padding: 12px;
+            display: flex;
+            gap: 10px;
+            background: white;
+        }
+        .inline-ai-input input {
+            flex: 1;
+            background: white !important;
+            border: 1px solid #ddd;
+            color: #333 !important;
+            border-radius: 20px;
+            padding: 10px 16px;
+            outline: none;
+        }
+        .inline-ai-input input:focus { border-color: #6c63ff; }
+        .inline-ai-input button {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6c63ff 0%, #48cae4 100%);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .inline-ai-input button:hover { transform: scale(1.1); box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3); }
+        .ai-bubble {
+            max-width: 85%;
+            padding: 12px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .ai-bubble.bot {
+            background: white !important;
+            color: #333 !important;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .ai-bubble.user {
+            background: #6c63ff !important;
+            color: white !important;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html"><i class="fa-solid fa-house-signal"></i> Smart<span>Home</span></a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="products.html">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.html">Tin tức</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="tuvan.html"><i class="fa-solid fa-headset me-1"></i>Tư vấn</a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html" style="position:relative">
+                            <i class="fa-solid fa-cart-shopping fs-5"></i>
+                            <span class="badge bg-danger rounded-circle position-absolute top-0 start-100 translate-middle" id="cart-count" style="display:none">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="nav-login-btn">
+                        <a href="auth.html" class="btn btn-primary ms-2">Đăng nhập</a>
+                    </li>
+                    <li class="nav-item dropdown" id="nav-user-menu" style="display:none">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-circle-user fs-5"></i>
+                            <span id="nav-user-name" class="ms-1">Tài khoản</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile.html">Hồ sơ</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logout-btn">Đăng xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-bar">
+        <div class="container">
+            <a href="index.html">Trang chủ</a>
+            <span class="mx-2 text-secondary">›</span>
+            <span class="current">Tư vấn mua hàng</span>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <section class="tuvan-hero">
+        <div class="container">
+            <h1><i class="fa-solid fa-headset text-accent me-2"></i>Tư vấn mua hàng</h1>
+            <p>Không biết chọn sản phẩm nào phù hợp? Hỏi chuyên gia SmartHome — chúng tôi sẽ giúp bạn tìm ra giải pháp tốt nhất cho ngôi nhà của mình.</p>
+            <div class="d-flex gap-3 justify-content-center">
+                <a href="#ai-chat" class="btn btn-primary btn-lg">
+                    <i class="fa-solid fa-robot me-2"></i>Hỏi AI trợ lý
+                </a>
+                <a href="tel:19001234" class="btn btn-outline btn-lg">
+                    <i class="fa-solid fa-phone me-2"></i>Gọi 1900 1234
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <!-- Hướng dẫn chọn sản phẩm -->
+        <h2 class="section-title">Hướng dẫn chọn mua</h2>
+        <div class="row g-4 mb-5">
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-robot"></i></div>
+                    <h4>Robot hút bụi — Chọn như thế nào?</h4>
+                    <p>Xem xét diện tích nhà, loại sàn (gỗ/gạch/thảm), có nuôi thú cưng không, và ngân sách. Robot dưới 5 triệu đủ cho căn hộ nhỏ. Từ 10 triệu trở lên mới có tự đổ rác và giặt giẻ.</p>
+                    <a href="products.html?cat=1" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-video"></i></div>
+                    <h4>Camera an ninh — Trong nhà hay ngoài trời?</h4>
+                    <p>Camera trong nhà: ưu tiên quay 360°, nhân diện người AI, phát hiện thú cưng. Camera ngoài trời: cần chống nước IP67+, hồng ngoại đủ xa. Dưới 1 triệu là Xiaomi, trên 2 triệu có Ezviz, Hikvision.</p>
+                    <a href="products.html?cat=3" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h4>Đèn thông minh — Bắt đầu từ đâu?</h4>
+                    <p>Bắt đầu thử nghiệm với Yeelight (~250k/bóng) — rẻ, hỗ trợ Google/Alexa. Muốn hệ sinh thái đầy đủ, đàm mịn hơn → Philips Hue (cần mua Bridge). 1 starter kit Hue ~3.5 triệu.</p>
+                    <a href="products.html?cat=4" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-lock"></i></div>
+                    <h4>Khóa cửa vân tay — An toàn không?</h4>
+                    <p>Chọn khóa có chứng nhận an toàn cấp D/E, hỗ trợ mở bằng nhiều cách (vân tay + mật mã + thẻ + chìa dự phòng + app). Samsung và Philips là 2 thương hiệu tin cậy nhất thị trường VN.</p>
+                    <a href="products.html?cat=6" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-fan"></i></div>
+                    <h4>Máy lọc không khí — Cần không?</h4>
+                    <p>Nếu bạn ở gần đường lớn, có trẻ nhỏ hoặc người già — RẤT cần. Lọc HEPA H13 loại được PM2.5. Xiaomi 4 Pro đủ tốt cho căn hộ 60m². Dyson cho phòng lớn hoặc có nhu cầu cao cấp.</p>
+                    <a href="products.html?cat=2" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="guide-card">
+                    <div class="guide-icon"><i class="fa-solid fa-volume-high"></i></div>
+                    <h4>Loa thông minh — Loại nào phù hợp?</h4>
+                    <p>Chỉ muốn nghe nhạc + điều khiển thiết bị đơn giản → Amazon Echo Dot (~1.2 triệu). Muốn màn hình + video call + điều khiển nhà thông minh toàn diện → Google Nest Hub Max (~5.5 triệu).</p>
+                    <a href="products.html?cat=7" class="btn btn-outline btn-sm"><i class="fa-solid fa-shopping-cart me-1"></i>Xem sản phẩm</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gợi ý theo ngân sách -->
+        <h2 class="section-title">Gợi ý theo ngân sách</h2>
+        <div class="budget-table mb-5">
+            <div class="budget-row">
+                <div class="budget-range">Dưới 1 triệu</div>
+                <div class="budget-products">Bóng đèn Yeelight W3 (250k), Camera Xiaomi C500 Pro (790k), Ổ cắm thông minh TP-Link (350k)</div>
+                <div class="budget-tag">Khởi đầu</div>
+            </div>
+            <div class="budget-row">
+                <div class="budget-range">1 – 5 triệu</div>
+                <div class="budget-products">Camera Ezviz C6 (990k), Máy lọc khí Xiaomi 4 Pro (3.9 triệu), Loa Amazon Echo Dot (1.2 triệu), Bộ đèn Philips Hue (3.5 triệu)</div>
+                <div class="budget-tag">Phổ biến</div>
+            </div>
+            <div class="budget-row">
+                <div class="budget-range">5 – 10 triệu</div>
+                <div class="budget-products">Robot hút bụi Xiaomi X20 Pro (8.5 triệu), Khóa cửa Samsung DP609 (7.5 triệu), Google Nest Hub Max (5.5 triệu)</div>
+                <div class="budget-tag">Cao cấp</div>
+            </div>
+            <div class="budget-row">
+                <div class="budget-range">Trên 10 triệu</div>
+                <div class="budget-products">Ecovacs Deebot T30 Pro (17 triệu), Roborock S8 MaxV Ultra (20 triệu), Dyson Purifier (26 triệu)</div>
+                <div class="budget-tag">Premium</div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left: AI Chat inline -->
+            <div class="col-lg-7" id="ai-chat">
+                <h2 class="section-title" style="text-align:left">💬 Hỏi AI Trợ lý SmartHome</h2>
+                <div class="inline-ai-box">
+                    <div class="inline-ai-header">
+                        <i class="fa-solid fa-robot text-accent fs-4"></i>
+                        <div>
+                            <div class="fw-bold text-white">SmartHome AI Advisor</div>
+                            <small class="text-secondary">Trả lời tức thì • Tư vấn 24/7</small>
+                        </div>
+                        <span class="badge bg-success ms-auto">Online</span>
+                    </div>
+                    <div class="inline-ai-messages" id="tuvan-ai-messages">
+                        <div class="ai-bubble bot">
+                            Xin chào! Tôi là AI Advisor của SmartHome 👋<br>
+                            Hãy mô tả nhu cầu của bạn để tôi tư vấn sản phẩm phù hợp nhất!<br><br>
+                            <strong>Ví dụ:</strong><br>
+                            • "Tư vấn robot hút bụi dưới 10 triệu"<br>
+                            • "Tôi cần camera an ninh cho nhà 3 tầng"<br>
+                            • "Đèn thông minh tương thích Google Home"
+                        </div>
+                    </div>
+                    <div class="inline-ai-input">
+                        <input type="text" id="tuvan-ai-input" placeholder="Nhập câu hỏi của bạn...">
+                        <button id="tuvan-ai-send"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: FAQ -->
+            <div class="col-lg-5">
+                <h2 class="section-title" style="text-align:left">❓ Câu hỏi thường gặp</h2>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                SmartHome có giao hàng toàn quốc không?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Có, SmartHome giao hàng toàn quốc. Miễn phí giao hàng cho đơn từ 500.000đ. Giao trong 2-3 ngày tại HCM & Hà Nội, 4-7 ngày tỉnh thành khác.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Bảo hành sản phẩm như thế nào?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Tất cả sản phẩm được bảo hành chính hãng 12-24 tháng. Robot hút bụi & máy lọc không khí: 24 tháng. Camera & đèn thông minh: 12 tháng. Bảo hành tại trung tâm của hãng hoặc tại SmartHome.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Có thể đổi trả sản phẩm không?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Chính sách đổi trả trong 7 ngày nếu sản phẩm lỗi hoặc không đúng mô tả. Sản phẩm phải còn nguyên hộp và đầy đủ phụ kiện. Liên hệ hotline 1900 1234 để được hỗ trợ.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Thiết bị có cần WiFi không?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Hầu hết thiết bị thông minh cần WiFi 2.4GHz để kết nối app điều khiển. Một số thiết bị hỗ trợ cả 5GHz (camera cao cấp, robot cao cấp). Bluetooth cũng được dùng với đèn và khóa cửa.</div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                                Có hỗ trợ lắp đặt tại nhà không?
+                            </button>
+                        </h2>
+                        <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">Có, SmartHome cung cấp dịch vụ lắp đặt tại nhà tại TP.HCM và Hà Nội. Phí lắp đặt từ 150.000đ tùy thiết bị. Đặt lịch qua hotline hoặc app SmartHome.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Card -->
+                <div class="contact-card mt-4">
+                    <h3><i class="fa-solid fa-phone-volume me-2"></i>Cần tư vấn trực tiếp?</h3>
+                    <p class="mb-4 opacity-75">Chuyên gia SmartHome sẵn sàng hỗ trợ bạn trong giờ hành chính</p>
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <a href="tel:19001234" class="contact-option text-white text-decoration-none d-block">
+                                <i class="fa-solid fa-phone"></i>
+                                <div class="fw-bold">Hotline</div>
+                                <small>1900 1234</small>
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="mailto:tuvan@smarthome.vn" class="contact-option text-white text-decoration-none d-block">
+                                <i class="fa-solid fa-envelope"></i>
+                                <div class="fw-bold">Email</div>
+                                <small>tuvan@smarthome.vn</small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating AI Widget -->
+    <div id="ai-widget" class="ai-widget-container">
+        <div class="ai-widget-btn" id="ai-widget-btn"><i class="fa-solid fa-robot"></i></div>
+        <div class="ai-chat-box" id="ai-chat-box">
+            <div class="ai-chat-header">
+                <h5 class="text-white m-0">Trợ lý SmartHome AI</h5>
+                <i class="fa-solid fa-xmark ai-close-btn" id="ai-close-btn"></i>
+            </div>
+            <div class="ai-chat-messages" id="ai-chat-messages">
+                <div class="ai-msg bot">Chào bạn! Hỏi tôi về sản phẩm nhà thông minh nhé!</div>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" id="ai-chat-input" class="ai-chat-input" placeholder="Hỏi về sản phẩm...">
+                <button class="ai-send-btn" id="ai-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/main.js"></script>
+    <script src="js/ai-chat.js"></script>
+    <script>
+        // ====== INLINE AI CHAT SYNCED WITH AI-CHAT.JS ======
+        const inlineMessages = document.getElementById('tuvan-ai-messages');
+        const inlineInput = document.getElementById('tuvan-ai-input');
+        const inlineSend = document.getElementById('tuvan-ai-send');
+        let inlineSessionId = sessionStorage.getItem('smartHomeAiSessionId') || null;
+
+        // Cung cấp hàm ra window để widget có thể gọi đồng bộ
+        window.tuvanInlineChat = {
+            addInlineBubble: (text, type, products, skipSync) => addInlineBubble(text, type, products, skipSync)
+        };
+
+        // Sử dụng chung hàm appendMessage từ logic ai-chat.js nếu có thể, 
+        // hoặc viết lại bản tối giản cho Inline nhưng phải đồng bộ format.
+        function addInlineBubble(text, type, products = null, skipSync = false) {
+            const div = document.createElement('div');
+            div.className = `ai-bubble ${type}`;
+            
+            // Xử lý Markdown đơn giản và xóa lặp nếu có products
+            let cleanText = text;
+            if (products && products.length > 0) {
+                cleanText = text.split('\n').filter(line => !/^\d+\.\s/.test(line.trim())).join('\n');
+            }
+            
+            div.innerHTML = cleanText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+            inlineMessages.appendChild(div);
+
+            // Render cards nếu có
+            if (products && products.length > 0) {
+                const wrap = document.createElement('div');
+                wrap.style.cssText = 'display:flex;gap:10px;overflow-x:auto;padding:10px 0;margin-bottom:10px;';
+                products.forEach(p => {
+                    const priceVnd = Number(p.salePrice || p.price || p.unitPrice || 0).toLocaleString('vi-VN') + 'đ';
+                    const card = document.createElement('div');
+                    card.style.cssText = 'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:10px;min-width:140px;cursor:pointer;';
+                    
+                    let img = 'https://placehold.co/100x80?text=SmartHome';
+                    try {
+                        let raw = p.imageUrls || p.productImage;
+                        if (raw && raw.startsWith('[')) img = JSON.parse(raw)[0];
+                        else if (raw) img = raw;
+                    } catch(e){}
+
+                        card.innerHTML = `
+                        <img src="${img}" style="width:100%;height:80px;object-fit:cover;border-radius:8px;margin-bottom:8px">
+                        <div style="font-size:0.85rem;font-weight:600;color:#fff;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:2.6em;">${p.name || p.productName}</div>
+                        <div style="font-size:0.8rem;color:#e94560;font-weight:700;margin-top:4px">${priceVnd}</div>
+                    `;
+                    card.onclick = () => window.location.href = `/product-detail.html?id=${p.id}`;
+                    wrap.appendChild(card);
+                });
+                inlineMessages.appendChild(wrap);
+            }
+
+            inlineMessages.scrollTop = inlineMessages.scrollHeight;
+            
+            // Đồng bộ sang widget chat
+            if (!skipSync && window.aiChatWidget) {
+                window.aiChatWidget.appendMessage(text, type, products, true);
+            }
+            
+            return div;
+        }
+
+        async function sendInlineMessage() {
+            const msg = inlineInput.value.trim();
+            if (!msg) return;
+            
+            addInlineBubble(msg, 'user');
+            inlineInput.value = '';
+            inlineSend.disabled = true;
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'ai-bubble bot';
+            typingDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+            inlineMessages.appendChild(typingDiv);
+            inlineMessages.scrollTop = inlineMessages.scrollHeight;
+
+            try {
+                const response = await axios.post('/api/ai/chat', { 
+                    message: msg, 
+                    sessionId: inlineSessionId 
+                });
+                
+                typingDiv.remove();
+                const data = response.data;
+                inlineSessionId = data.sessionId || inlineSessionId;
+                
+                // Cập nhật session storage và widget
+                sessionStorage.setItem('smartHomeAiSessionId', inlineSessionId);
+                if (window.aiChatWidget) {
+                    window.aiChatWidget.setSessionId(inlineSessionId);
+                }
+                
+                addInlineBubble(data.reply, 'bot', data.suggestedProducts);
+            } catch (err) {
+                typingDiv.remove();
+                addInlineBubble('Rất tiếc, tôi đang gặp sự cố kết nối. Bạn vui lòng thử lại sau hoặc gọi hotline **0823422987** nhé! 🙏', 'bot');
+            } finally {
+                inlineSend.disabled = false;
+            }
+        }
+
+        inlineSend.onclick = sendInlineMessage;
+        inlineInput.onkeydown = (e) => { if (e.key === 'Enter') sendInlineMessage(); };
+
+        // Load lịch sử khi mở trang
+        if (inlineSessionId) {
+            axios.get(`/api/ai/history/${inlineSessionId}`)
+                .then(res => {
+                    if (res.data && res.data.messages && res.data.messages.length > 0) {
+                        inlineMessages.innerHTML = ''; // Clear default greeting
+                        res.data.messages.forEach(msg => {
+                            const role = msg.role === 'USER' ? 'user' : 'bot';
+                            // Cờ skipSync = true để không gọi ngược lại widget vì widget cũng tự load history
+                            addInlineBubble(msg.content, role, null, true); 
+                        });
+                    }
+                })
+                .catch(err => console.error("Could not load chat history", err));
+        }
+    </script>
+    </script>
+
+
+</body>
+</html>

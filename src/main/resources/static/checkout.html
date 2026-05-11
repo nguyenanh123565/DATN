@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thanh Toán - SmartHome</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --bg-body: #0a0a12;
+            --bg-card: rgba(25, 25, 45, 0.7);
+            --accent-color: #e94560;
+            --text-main: #e0e0e0;
+            --text-muted: #94a3b8;
+            --border-glass: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(233, 69, 96, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 100% 100%, rgba(15, 52, 96, 0.15) 0%, transparent 40%);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 18, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-glass);
+        }
+        
+        .checkout-box {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .checkout-box:hover {
+            border-color: rgba(233, 69, 96, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .checkout-box h4 {
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 28px;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.25rem;
+        }
+        
+        .form-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .form-control, .form-select {
+            background-color: rgba(15, 23, 42, 0.6) !important;
+            border: 1px solid var(--border-glass) !important;
+            color: #fff !important;
+            border-radius: 12px;
+            padding: 14px 18px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 4px rgba(233, 69, 96, 0.2) !important;
+        }
+
+        .cart-item-row {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .product-thumbnail {
+            width: 64px;
+            height: 64px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid var(--border-glass);
+        }
+
+        .checkout-summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .checkout-summary-row.total {
+            font-weight: 800;
+            font-size: 1.75rem;
+            color: #fff;
+            border-top: 1px solid var(--border-glass);
+            padding-top: 24px;
+            margin-top: 20px;
+        }
+        
+        .checkout-summary-row.total span:last-child {
+            color: var(--accent-color);
+        }
+
+        .btn-place-order {
+            background: linear-gradient(135deg, #e94560 0%, #ff2e63 100%);
+            border: none;
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 32px rgba(233, 69, 96, 0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .btn-place-order:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 40px rgba(233, 69, 96, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .payment-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border-glass);
+            padding: 20px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .payment-card:hover {
+            background: rgba(233, 69, 96, 0.05);
+            border-color: var(--accent-color);
+        }
+
+        .payment-card.active {
+            background: rgba(233, 69, 96, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .sticky-summary {
+            position: sticky;
+            top: 100px;
+        }
+
+        .swal2-popup {
+            background: #1a1a2e !important;
+            color: #fff !important;
+            border-radius: 20px !important;
+        }
+
+        /* Loyalty Rank Colors */
+        .rank-text-NORMAL { color: #b0b0c8 !important; }
+        .rank-text-SILVER { color: #d0d0f0 !important; }
+        .rank-text-GOLD   { color: #ffc31e !important; }
+        .rank-text-VIP    { color: #ff6b8a !important; }
+        
+        .rank-icon-badge {
+            font-size: 0.9rem;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container d-flex align-items-center">
+            <a class="navbar-brand me-4 text-white fw-bold" href="index.html" style="font-size: 1.5rem">
+                <span style="color:var(--accent-color)">Smart</span>Home
+            </a>
+            <div class="ms-auto d-flex align-items-center gap-4">
+                <a class="text-white text-decoration-none small d-none d-md-block" href="products.html">Sản phẩm</a>
+                <span id="userInfo" class="fw-semibold" style="color:var(--accent-color)">Tài khoản</span>
+            </div>
+        </div>
+    </nav>
+
+<div class="container my-5 pb-5">
+    <h2 class="mb-4 fw-bold text-center" style="letter-spacing: -0.5px;">Hoàn Tất Đơn Hàng</h2>
+
+    <div class="row g-4 mt-2">
+        <!-- Cột nhập liệu -->
+        <div class="col-lg-7">
+            <div class="checkout-box">
+                <h4><i class="fa-solid fa-truck-fast"></i> Thông tin giao hàng</h4>
+                <form id="checkoutForm">
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="customerName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ nhận hàng (Chi tiết)</label>
+                        <div class="row g-2 mb-2">
+                          <div class="col-12 col-md-4">
+                            <select class="form-select" id="city" required>
+                                <option value="" selected disabled>Chọn Tỉnh/Thành</option>
+                            </select>
+                          </div>
+                          <div class="col-12 col-md-4">
+                            <select class="form-select" id="district" required disabled>
+                                <option value="" selected disabled>Chọn Quận/Huyện</option>
+                            </select>
+                          </div>
+                          <div class="col-12 col-md-4">
+                            <select class="form-select" id="ward" required disabled>
+                                <option value="" selected disabled>Chọn Phường/Xã</option>
+                            </select>
+                          </div>
+                          <div class="col-12 mt-2">
+                            <input type="text" class="form-control" id="street" placeholder="Số nhà, Đường/Thôn/Xóm" required>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú (Tùy chọn)</label>
+                        <textarea class="form-control" id="notes" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+
+            <div class="checkout-box">
+                <h4><i class="fa-solid fa-wallet"></i> Phương thức thanh toán</h4>
+                <div class="payment-card active">
+                    <i class="fa-solid fa-money-bill-transfer fs-4 text-accent"></i>
+                    <div>
+                        <div class="fw-bold">Thanh toán khi nhận hàng (COD)</div>
+                        <div class="small text-muted">Thanh toán bằng tiền mặt khi shipper giao hàng tới.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cột tóm tắt -->
+        <div class="col-lg-5">
+            <div class="checkout-box sticky-summary">
+                <h4><i class="fa-solid fa-receipt"></i> Tóm tắt đơn hàng</h4>
+                <div id="cartItemsContainer" class="mb-4" style="max-height: 300px; overflow-y: auto;">
+                    <!-- JS Render Cart Items -->
+                </div>
+
+                <div class="p-4 rounded-4 mb-4" style="background: rgba(15, 23, 42, 0.4); border: 1px solid var(--border-glass);">
+                    <div class="checkout-summary-row">
+                        <span>Tạm tính (<span id="cartCount">0</span> sản phẩm)</span>
+                        <span id="subtotalAmount" class="text-white fw-bold">0 đ</span>
+                    </div>
+                    
+                    <div class="checkout-summary-row">
+                        <span>Phí vận chuyển</span>
+                        <span id="shippingAmount" class="text-success fw-bold">Chọn địa chỉ...</span>
+                    </div>
+
+                    <div id="discountRow" class="checkout-summary-row" style="display: none;">
+                        <span>Giảm giá (<span id="appliedCodeText"></span>)</span>
+                        <span id="discountAmount" class="text-danger fw-bold">- 0 đ</span>
+                    </div>
+
+                    <div id="loyaltyDiscountRow" class="checkout-summary-row" style="display: none;">
+                        <span>Ưu đãi hạng <span id="userRankBadge" class="ms-1"></span></span>
+                        <span id="loyaltyDiscountAmount" class="text-danger fw-bold">- 0 đ</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Mã giảm giá (Tùy chọn)</label>
+                    <div class="input-group">
+                        <input type="text" id="discountCode" class="form-control" placeholder="Ví dụ: GIAM20, SMART50...">
+                        <button class="btn btn-outline-danger px-4" id="btnApplyDiscount">Áp dụng</button>
+                    </div>
+                </div>
+                
+                <div class="checkout-summary-row total">
+                    <span>Tổng thanh toán</span>
+                    <span id="finalAmount">0 đ</span>
+                </div>
+
+                <button class="btn-place-order w-100 mt-4" id="btnPlaceOrder">
+                    Đặt hàng ngay <i class="fa-solid fa-arrow-right ms-2"></i>
+                </button>
+                
+                <p class="text-center mt-3 small text-muted">
+                    <i class="fa-solid fa-shield-halved me-1"></i> Bảo mật thông tin thanh toán 100%
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+<script>
+    const token = localStorage.getItem("token");
+    if (!token) {
+        window.location.href = "/auth.html";
+    }
+
+    let cartSubtotal = 0;
+    let shippingFee = 0;
+    let discountAmount = 0;
+    let loyaltyDiscountAmount = 0;
+    let currentDiscountCode = null;
+    let userLoyalty = { rank: 'NORMAL', rate: 0 };
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadUserProfile();
+        loadCart();
+        initVietnamAddress();
+    });
+
+    function getAuthHeaders() {
+        return {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        };
+    }
+
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+
+    async function loadUserProfile() {
+        try {
+            const resp = await fetch("/api/v1/users/me", { headers: getAuthHeaders() });
+            if (resp.ok) {
+                const rs = await resp.json();
+                let user = rs.data;
+                document.getElementById("userInfo").textContent = "Xin chào, " + user.fullName;
+                
+                document.getElementById("customerName").value = user.fullName;
+                document.getElementById("phone").value = user.phone || "";
+                
+                // Store loyalty info
+                userLoyalty.rank = user.loyaltyRank || 'NORMAL';
+                userLoyalty.rate = user.loyaltyDiscountRate || 0;
+                
+                const rankLabels = { 'NORMAL': 'Thành viên', 'SILVER': 'Bạc', 'GOLD': 'Vàng', 'VIP': 'VIP' };
+                const rankIcons  = { 'NORMAL': '🏅', 'SILVER': '🥈', 'GOLD': '🥇', 'VIP': '👑' };
+                
+                if (userLoyalty.rank !== 'NORMAL') {
+                    document.getElementById("loyaltyDiscountRow").style.display = "flex";
+                    const badgeEl = document.getElementById("userRankBadge");
+                    badgeEl.innerHTML = `<span class="rank-icon-badge">${rankIcons[userLoyalty.rank]}</span><span class="rank-text-${userLoyalty.rank} fw-bold">${rankLabels[userLoyalty.rank]}</span>`;
+                }
+
+                if (user.address && user.address.length > 0) {
+                    const defaultAddress = user.address.find(a => a.isDefault) || user.address[0];
+                    // Nếu là chuỗi địa chỉ cũ kiểu cũ, ta chỉ điền vào Street để user chọn lại Tỉnh/Huyện cho chuẩn
+                    document.getElementById('street').value = defaultAddress.fullAddress;
+                }
+            }
+        } catch (error) {
+            console.error("Lỗi lấy thông tin user", error);
+        }
+    }
+
+    async function loadCart() {
+        try {
+            const resp = await fetch("/api/v1/cart", { headers: getAuthHeaders() });
+            if (resp.ok) {
+                const rs = await resp.json();
+                let cart = rs.data;
+                if (!cart || !cart.items || cart.items.length === 0) {
+                    alert("Giỏ hàng của bạn trống. Vui lòng thêm sản phẩm!");
+                    window.location.href = "/index.html";
+                    return;
+                }
+                
+                renderCart(cart);
+            }
+        } catch (error) {
+            console.error("Lỗi lấy giỏ hàng", error);
+        }
+    }
+
+    function renderCart(cart) {
+        cartSubtotal = cart.totalAmount || 0;
+        document.getElementById("cartCount").textContent = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById("subtotalAmount").textContent = formatNumber(cartSubtotal) + " đ";
+        
+        let html = "";
+        cart.items.forEach(item => {
+            let img = item.productImage ? item.productImage : 'https://via.placeholder.com/60';
+            if (img && !img.startsWith('http')) {
+                img = '/api/v1/files/' + img;
+            }
+            html += `
+                <div class="cart-item-row">
+                    <img src="${img}" class="product-thumbnail" alt="${item.productName}">
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">${item.productName}</div>
+                        <div class="text-muted small">SL: ${item.quantity}</div>
+                    </div>
+                    <div class="fw-bold">${formatNumber(item.subtotal)} đ</div>
+                </div>
+            `;
+        });
+        document.getElementById("cartItemsContainer").innerHTML = html;
+        updateTotal();
+    }
+
+    function updateTotal() {
+        // Recalculate loyalty discount based on subtotal and voucher discount (max 13% total cap)
+        const MAX_RATE = 0.13;
+        const maxTotalDiscount = Math.floor(cartSubtotal * MAX_RATE);
+        const remainingRoom = Math.max(0, maxTotalDiscount - discountAmount);
+        const afterVoucher = Math.max(0, cartSubtotal - discountAmount);
+        
+        loyaltyDiscountAmount = Math.min(remainingRoom, Math.floor(afterVoucher * userLoyalty.rate));
+        
+        if (loyaltyDiscountAmount > 0) {
+            document.getElementById("loyaltyDiscountRow").style.display = "flex";
+            document.getElementById("loyaltyDiscountAmount").textContent = "- " + formatNumber(loyaltyDiscountAmount) + " đ";
+        } else {
+            // Only hide if rank is NORMAL or no discount possible
+            if (userLoyalty.rank === 'NORMAL' || loyaltyDiscountAmount === 0) {
+                document.getElementById("loyaltyDiscountRow").style.display = (userLoyalty.rank !== 'NORMAL' ? "flex" : "none");
+                document.getElementById("loyaltyDiscountAmount").textContent = "- 0 đ";
+            }
+        }
+
+        let finalAmount = cartSubtotal + shippingFee - discountAmount - loyaltyDiscountAmount;
+        if (finalAmount < 0) finalAmount = 0;
+        document.getElementById("shippingAmount").textContent = shippingFee > 0 ? formatNumber(shippingFee) + " đ" : "Miễn phí";
+        document.getElementById("finalAmount").textContent = formatNumber(finalAmount) + " đ";
+    }
+
+    async function fetchShippingFee(address) {
+        if (!address) return;
+        try {
+            const resp = await fetch(`/api/v1/checkout/shipping-fee?address=${encodeURIComponent(address)}`, {
+                headers: getAuthHeaders()
+            });
+            if (resp.ok) {
+                const rs = await resp.json();
+                shippingFee = rs.data || 0;
+                updateTotal();
+            }
+        } catch (error) {
+            console.error("Lỗi lấy phí ship", error);
+        }
+    }
+
+    function getFullAddressString() {
+        const citySel = document.getElementById('city');
+        const distSel = document.getElementById('district');
+        const wardSel = document.getElementById('ward');
+        const street = document.getElementById('street').value.trim();
+        
+        if (!citySel.value || !distSel.value || !wardSel.value || !street) return null;
+        
+        try {
+            const city = citySel.options[citySel.selectedIndex].text;
+            const dist = distSel.options[distSel.selectedIndex].text;
+            const ward = wardSel.options[wardSel.selectedIndex].text;
+            return `${street}, ${ward}, ${dist}, ${city}`;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // Removed btnCalcShipping logic as it is now fixed
+
+
+    document.getElementById("btnApplyDiscount").addEventListener("click", async () => {
+        const code = document.getElementById("discountCode").value;
+        if (!code) {
+            alert("Vui lòng nhập mã giảm giá");
+            return;
+        }
+
+        try {
+            const resp = await fetch("/api/v1/checkout/apply-discount", {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ code: code })
+            });
+            const rs = await resp.json();
+            if (resp.ok) {
+                discountAmount = rs.data.discountAmount || 0;
+                currentDiscountCode = code;
+                
+                document.getElementById("appliedCodeText").textContent = code;
+                document.getElementById("discountAmount").textContent = "- " + formatNumber(discountAmount) + " đ";
+                document.getElementById("discountRow").style.display = "flex";
+                
+                updateTotal();
+            } else {
+                alert("Lỗi mã giảm giá: " + (rs.message || "Unknown error"));
+                discountAmount = 0;
+                currentDiscountCode = null;
+                document.getElementById("discountRow").style.display = "none";
+                updateTotal();
+            }
+        } catch (error) {
+            alert("Đã xảy ra lỗi khi kiểm tra mã giảm giá!");
+        }
+    });
+
+    document.getElementById("btnPlaceOrder").addEventListener("click", async () => {
+        const fullAddress = getFullAddressString();
+        const customerName = document.getElementById("customerName").value;
+        const phone = document.getElementById("phone").value;
+
+        if (!customerName) {
+            Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập Họ tên người nhận!' });
+            return;
+        }
+        if (!phone) {
+            Swal.fire({ icon: 'warning', title: 'Thiếu thông tin', text: 'Vui lòng nhập Số điện thoại!' });
+            return;
+        }
+        if (!fullAddress) {
+            Swal.fire({ icon: 'warning', title: 'Thiếu địa chỉ', text: 'Vui lòng chọn đầy đủ Tỉnh thành, Quận huyện, Phường xã và Địa chỉ nhà!' });
+            return;
+        }
+
+        const confirmResult = await Swal.fire({
+            title: 'Xác nhận đặt hàng?',
+            html: `Tổng thanh toán: <b style="color:#e94560">${document.getElementById("finalAmount").textContent}</b><br><small>Thanh toán khi nhận hàng (COD)</small>`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#e94560',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Đồng ý đặt hàng',
+            cancelButtonText: 'Quay lại'
+        });
+
+        if (!confirmResult.isConfirmed) return;
+
+        const payload = {
+            customerName: customerName,
+            phone: phone,
+            address: fullAddress,
+            notes: document.getElementById("notes").value,
+            discountCode: currentDiscountCode,
+            shippingFee: shippingFee
+        };
+
+        try {
+            Swal.fire({
+                title: 'Đang xử lý...',
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            const resp = await fetch("/api/v1/checkout", {
+                method: "POST",
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload)
+            });
+            const rs = await resp.json();
+            
+            if (resp.ok) {
+                await Swal.fire({
+                    icon: 'success',
+                    title: 'Đặt hàng thành công!',
+                    text: 'Cảm ơn bạn đã tin tưởng SmartHome. Mã đơn: ' + rs.data.id,
+                    confirmButtonColor: '#e94560'
+                });
+                window.location.href = "/orders.html";
+            } else {
+                Swal.fire({ icon: 'error', title: 'Lỗi đặt hàng', text: rs.message });
+            }
+        } catch (error) {
+            Swal.fire({ icon: 'error', title: 'Lỗi hệ thống', text: 'Vui lòng thử lại sau!' });
+        }
+    });
+
+    async function initVietnamAddress() {
+        try {
+            const resp = await fetch("https://provinces.open-api.vn/api/");
+            const data = await resp.json();
+            let html = '<option value="" selected disabled>Chọn Tỉnh/Thành</option>';
+            data.forEach(p => { html += `<option value="${p.code}" data-name="${p.name}">${p.name}</option>`; });
+            document.getElementById('city').innerHTML = html;
+        } catch(e) { console.error('Lỗi tải Tỉnh', e); }
+
+        document.getElementById('city').addEventListener('change', async (e) => {
+            let pid = e.target.value;
+            let cityName = e.target.options[e.target.selectedIndex].text;
+            
+            // Gọi API tính phí ship ngay khi chọn Tỉnh
+            fetchShippingFee(cityName);
+
+            let distHtml = '<option value="" selected disabled>Chọn Quận/Huyện</option>';
+            document.getElementById('ward').innerHTML = '<option value="" selected disabled>Chọn Phường/Xã</option>';
+            document.getElementById('ward').disabled = true;
+            if(!pid) { document.getElementById('district').disabled = true; return; }
+            
+            try {
+                const resp = await fetch(`https://provinces.open-api.vn/api/p/${pid}?depth=2`);
+                const data = await resp.json();
+                data.districts.forEach(d => { distHtml += `<option value="${d.code}" data-name="${d.name}">${d.name}</option>`; });
+                document.getElementById('district').innerHTML = distHtml;
+                document.getElementById('district').disabled = false;
+            } catch(e) {}
+        });
+
+        document.getElementById('district').addEventListener('change', async (e) => {
+            let did = e.target.value;
+            let wardHtml = '<option value="" selected disabled>Chọn Phường/Xã</option>';
+            if(!did) { document.getElementById('ward').disabled = true; return; }
+            try {
+                const resp = await fetch(`https://provinces.open-api.vn/api/d/${did}?depth=2`);
+                const data = await resp.json();
+                data.wards.forEach(w => { wardHtml += `<option value="${w.code}" data-name="${w.name}">${w.name}</option>`; });
+                document.getElementById('ward').innerHTML = wardHtml;
+                document.getElementById('ward').disabled = false;
+            } catch(e) {}
+        });
+    }
+</script>
+</body>
+</html>

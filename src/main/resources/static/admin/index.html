@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SmartHome Admin</title>
+    <!-- Fonts & CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Admin Custom CSS -->
+    <link rel="stylesheet" href="css/admin-style.css">
+</head>
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <i class="fa-solid fa-house-signal"></i> <span>Smart<b>Admin</b></span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-item active">
+                <i class="fa-solid fa-gauge-high"></i> <span>Tổng quan Dashboard</span>
+            </a>
+            <a href="products.html" class="menu-item">
+                <i class="fa-solid fa-box-open"></i> <span>Quản lý Sản phẩm</span>
+            </a>
+            <a href="orders.html" class="menu-item">
+                <i class="fa-solid fa-cart-shopping"></i> <span>Quản lý Đơn hàng</span>
+            </a>
+            <a href="users.html" class="menu-item">
+                <i class="fa-solid fa-users"></i> <span>Khách hàng</span>
+            </a>
+            <a href="promotions.html" class="menu-item">
+                <i class="fa-solid fa-tags"></i> <span>Khuyến mãi</span>
+            </a>
+
+            <a href="reports.html" class="menu-item">
+                <i class="fa-solid fa-chart-pie"></i> <span>Báo cáo & Thống kê</span>
+            </a>
+        </div>
+        <div class="sidebar-footer">
+            <button class="logout-btn" id="logout-btn-action">
+                <i class="fa-solid fa-power-off"></i> <span>Đăng xuất</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-content" id="main-content">
+        
+        <!-- HeaderBar -->
+        <header class="admin-header">
+            <button class="toggle-sidebar-btn" id="toggle-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="header-profile">
+                <a href="../index.html" target="_blank" class="btn btn-outline-secondary btn-sm me-3 text-white border-secondary">
+                    <i class="fa-solid fa-globe"></i> Xem Website
+                </a>
+                <div class="text-end d-none d-sm-block">
+                    <h6 class="m-0" id="admin-name">Quản Trị Viên</h6>
+                    <small class="text-secondary">Super Admin</small>
+                </div>
+                <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" alt="Admin">
+            </div>
+        </header>
+
+        <!-- Stats Cards Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h5>Tổng Đơn hàng</h5>
+                        <h3 id="statTotalOrders"><span class="spinner-border spinner-border-sm"></span></h3>
+                        <span class="text-secondary small" id="statPendingOrders">-- đơn chờ xác nhận</span>
+                    </div>
+                    <div class="stat-icon icon-blue"><i class="fa-solid fa-cart-flatbed"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h5>Tổng Thực Nhận</h5>
+                        <h3 id="statTotalProfit" class="text-success"><span class="spinner-border spinner-border-sm"></span></h3>
+                        <span class="text-secondary small">Sau khi trừ giá vốn</span>
+                    </div>
+                    <div class="stat-icon icon-green" style="background: rgba(16, 185, 129, 0.2); color: #10b981;"><i class="fa-solid fa-sack-dollar"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h5>Tổng Doanh thu</h5>
+                        <h3 id="statTotalRevenue"><span class="spinner-border spinner-border-sm"></span></h3>
+                        <span class="text-secondary small">Từ đơn đã hoàn thành</span>
+                    </div>
+                    <div class="stat-icon icon-blue"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h5>Tổng Sản phẩm</h5>
+                        <h3 id="statTotalProducts"><span class="spinner-border spinner-border-sm"></span></h3>
+                        <span class="text-secondary small">Trong hệ thống</span>
+                    </div>
+                    <div class="stat-icon icon-yellow"><i class="fa-solid fa-boxes-stacked"></i></div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xl-3">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h5>Khách hàng</h5>
+                        <h3 id="statTotalUsers"><span class="spinner-border spinner-border-sm"></span></h3>
+                        <span class="text-secondary small" id="statShippingOrders">-- đơn đang giao</span>
+                    </div>
+                    <div class="stat-icon icon-red"><i class="fa-solid fa-users"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-4 mb-4">
+            <div class="col-lg-8">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4 class="chart-title">Doanh thu theo tháng (<span id="revenueYearLabel">--</span>)</h4>
+                        <span class="text-secondary small">Chỉ tính đơn Đã giao</span>
+                    </div>
+                    <canvas id="revenueChart" height="100"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="chart-box">
+                    <div class="chart-header">
+                        <h4 class="chart-title">TOP Sản phẩm Bán chạy</h4>
+                    </div>
+                    <canvas id="categoryChart" height="220"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Selling Products Table -->
+        <div class="chart-box">
+            <div class="chart-header">
+                <h4 class="chart-title">TOP Sản phẩm Bán chạy nhất</h4>
+                <button class="btn btn-sm btn-outline-primary" onclick="window.location.href='products.html'">Xem tất cả sản phẩm</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table text-white mb-0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên Sản Phẩm</th>
+                            <th>Đơn giá</th>
+                            <th>Đã Bán</th>
+                            <th>Thực nhận</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topProductsTable">
+                        <tr><td colspan="5" class="text-center text-secondary py-3"><span class="spinner-border spinner-border-sm me-2"></span>Đang tải dữ liệu thực...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/admin.js"></script>
+    
+    <script>
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.font.family = "'Inter', sans-serif";
+
+        let revenueChartInstance = null;
+        let categoryChartInstance = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDashboardStats();
+        });
+
+        async function loadDashboardStats() {
+            try {
+                const res = await apiClient.get('/dashboard/stats');
+                const stats = res.data.data;
+
+                // ---- 1. Stat Cards ----
+                document.getElementById('statTotalOrders').textContent = Number(stats.totalOrders).toLocaleString('vi-VN');
+                document.getElementById('statPendingOrders').textContent = `${stats.pendingOrders} đơn chờ xác nhận`;
+                document.getElementById('statTotalRevenue').textContent = formatRevenue(stats.totalRevenue || 0);
+                document.getElementById('statTotalProfit').textContent = formatRevenue(stats.totalProfit || 0);
+                document.getElementById('statTotalProducts').textContent = Number(stats.totalProducts).toLocaleString('vi-VN');
+                document.getElementById('statTotalUsers').textContent = Number(stats.totalUsers).toLocaleString('vi-VN');
+                document.getElementById('statShippingOrders').textContent = `${stats.shippingOrders} đơn đang giao`;
+
+                // ---- 2. Revenue Line Chart ----
+                document.getElementById('revenueYearLabel').textContent = stats.revenueYear;
+                const monthLabels = ['T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12'];
+                const revenueData = stats.monthlyRevenue.map(v => Math.round(Number(v) / 1_000_000));
+
+                const ctxRev = document.getElementById('revenueChart').getContext('2d');
+                const gradientBlue = ctxRev.createLinearGradient(0, 0, 0, 350);
+                gradientBlue.addColorStop(0, 'rgba(59, 130, 246, 0.5)');
+                gradientBlue.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+                if (revenueChartInstance) revenueChartInstance.destroy();
+                revenueChartInstance = new Chart(ctxRev, {
+                    type: 'line',
+                    data: {
+                        labels: monthLabels,
+                        datasets: [
+                        {
+                            label: 'Doanh thu (Tr)',
+                            data: revenueData,
+                            fill: true,
+                            backgroundColor: gradientBlue,
+                            borderColor: '#3b82f6',
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 3,
+                        },
+                        {
+                            label: 'Thực nhận (Tr)',
+                            data: stats.monthlyProfit.map(v => Math.round(Number(v) / 1_000_000)),
+                            fill: false,
+                            borderColor: '#f59e0b',
+                            borderWidth: 2,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            pointRadius: 3,
+                        }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                            tooltip: {
+                                callbacks: { label: ctx => ` ${ctx.parsed.y.toLocaleString('vi-VN')} Triệu VNĐ` }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { callback: v => v + ' Tr' },
+                                grid: { color: 'rgba(255,255,255,0.05)' }
+                            },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+
+                // ---- 3. Top Products Donut Chart ----
+                const topProducts = stats.topProducts;
+                const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
+                if (topProducts && topProducts.length > 0) {
+                    const ctxCat = document.getElementById('categoryChart').getContext('2d');
+                    if (categoryChartInstance) categoryChartInstance.destroy();
+                    categoryChartInstance = new Chart(ctxCat, {
+                        type: 'doughnut',
+                        data: {
+                            labels: topProducts.map(p => truncate(p.productName, 18)),
+                            datasets: [{
+                                data: topProducts.map(p => Number(p.totalSold)),
+                                backgroundColor: colors,
+                                borderWidth: 0,
+                                hoverOffset: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            cutout: '65%',
+                            plugins: {
+                                legend: { position: 'bottom', labels: { padding: 15, boxWidth: 10, font: { size: 11 } } },
+                                tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.parsed} cái` } }
+                            }
+                        }
+                    });
+                } else {
+                    document.getElementById('categoryChart').parentElement.innerHTML +=
+                        '<p class="text-secondary text-center small mt-3">Chưa có dữ liệu bán hàng</p>';
+                }
+
+                // ---- 4. Top Products Table ----
+                const tbody = document.getElementById('topProductsTable');
+                if (!topProducts || topProducts.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center text-secondary py-4">Chưa có đơn hàng nào được hoàn thành.</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = topProducts.map((p, idx) => `
+                    <tr>
+                        <td><span style="width:28px;height:28px;background:${colors[idx % 5]};border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem">${idx + 1}</span></td>
+                        <td class="fw-semibold">${p.productName}</td>
+                        <td class="text-secondary small">${formatRevenue(p.unitPrice)}</td>
+                        <td><span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-10 px-2 py-1">${Number(p.totalSold).toLocaleString('vi-VN')} cái</span></td>
+                        <td class="text-success fw-bold">${formatRevenue(p.totalProfit)}</td>
+                    </tr>
+                `).join('');
+
+            } catch (e) {
+                console.error('Lỗi tải Dashboard stats:', e);
+                ['statTotalOrders','statTotalRevenue','statTotalProducts','statTotalUsers'].forEach(id => {
+                    document.getElementById(id).innerHTML = '<span class="text-danger small">Lỗi</span>';
+                });
+                document.getElementById('topProductsTable').innerHTML =
+                    '<tr><td colspan="4" class="text-center text-danger py-3">Không thể kết nối API. Vui lòng kiểm tra đăng nhập Admin.</td></tr>';
+            }
+        }
+
+        function formatRevenue(amount) {
+            const num = parseFloat(amount) || 0;
+            if (num >= 1_000_000_000) return (num / 1_000_000_000).toFixed(1).replace('.0','') + ' Tỷ';
+            if (num >= 1_000_000) return (num / 1_000_000).toFixed(1).replace('.0','') + ' Tr';
+            return num.toLocaleString('vi-VN') + ' đ';
+        }
+
+        function truncate(str, maxLen) {
+            return str && str.length > maxLen ? str.substring(0, maxLen) + '…' : (str || '');
+        }
+    </script>
+</body>
+</html>

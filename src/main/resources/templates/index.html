@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>SmartHome - Đồ Gia Dụng Thông Minh</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"/>
+    <style>
+        body { background: #0f0f1a; color: #e0e0e0; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background: rgba(20,20,40,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #2a2a5a; }
+        .hero {
+            background: linear-gradient(135deg, #1a1a3e 0%, #0d0d25 50%, #1a1a3e 100%);
+            padding: 80px 0; text-align: center;
+        }
+        .hero h1 { font-size: 3rem; font-weight: 700;
+            background: linear-gradient(90deg, #6c63ff, #48cae4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: #aaa; font-size: 1.2rem; }
+        .hero .btn-primary { background: linear-gradient(90deg, #6c63ff, #48cae4);
+            border: none; padding: 12px 30px; border-radius: 30px; font-size: 1rem; }
+        .card-product {
+            background: rgba(30,30,60,0.8); border: 1px solid #2a2a5a;
+            border-radius: 16px; transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card-product:hover { transform: translateY(-6px);
+            box-shadow: 0 10px 30px rgba(108,99,255,0.3); }
+        .badge-sale { background: linear-gradient(90deg, #ff416c, #ff4b2b); }
+        .price { color: #6c63ff; font-weight: 700; font-size: 1.2rem; }
+        .price-old { text-decoration: line-through; color: #888; font-size: 0.9rem; }
+        .stats-bar { background: rgba(20,20,40,0.95); border-top: 1px solid #2a2a5a;
+            border-bottom: 1px solid #2a2a5a; padding: 20px 0; }
+        .stat-item { text-align: center; }
+        .stat-item .number { font-size: 2rem; font-weight: 700; color: #6c63ff; }
+        .chat-btn { position: fixed; bottom: 30px; right: 30px; z-index: 999;
+            background: linear-gradient(135deg, #6c63ff, #48cae4);
+            border-radius: 50%; width: 60px; height: 60px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 20px rgba(108,99,255,0.5);
+            cursor: pointer; font-size: 1.5rem; color: white; }
+        footer { background: #0a0a18; border-top: 1px solid #2a2a5a;
+            padding: 30px 0; text-align: center; color: #666; }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/">
+            🏠 <span style="color:#6c63ff">Smart</span>Home
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link" href="/">Trang chủ</a></li>
+                <li class="nav-item"><a class="nav-link" href="/products">Sản phẩm</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Giới thiệu</a></li>
+                <li class="nav-item"><a class="nav-link" href="#">Liên hệ</a></li>
+            </ul>
+            <div>
+                <a href="/login" class="btn btn-outline-light btn-sm me-2">Đăng nhập</a>
+                <a href="/register" class="btn btn-sm" style="background:linear-gradient(90deg,#6c63ff,#48cae4);border:none;color:white;">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <h1>🏠 Nhà Thông Minh Tương Lai</h1>
+        <p class="my-3">Khám phá hàng ngàn sản phẩm đồ gia dụng thông minh — từ TV, camera đến ổ cắm WiFi</p>
+        <a href="/products" class="btn btn-primary me-2">Mua sắm ngay</a>
+        <a href="#" class="btn btn-outline-light">Tư vấn AI 🤖</a>
+    </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 stat-item">
+                <div class="number">500+</div>
+                <div>Sản phẩm</div>
+            </div>
+            <div class="col-md-3 stat-item">
+                <div class="number">10K+</div>
+                <div>Khách hàng</div>
+            </div>
+            <div class="col-md-3 stat-item">
+                <div class="number">50+</div>
+                <div>Thương hiệu</div>
+            </div>
+            <div class="col-md-3 stat-item">
+                <div class="number">24/7</div>
+                <div>Hỗ trợ AI</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PRODUCTS SECTION -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4 fw-bold">
+            <span style="color:#6c63ff">Sản phẩm</span> nổi bật
+        </h2>
+
+        <!-- Danh sách sản phẩm mẫu (sẽ được thay bằng dữ liệu từ backend) -->
+        <div class="row g-4" id="productGrid">
+            <!-- Load bằng JS từ API -->
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/products" class="btn btn-outline-light px-4">Xem tất cả sản phẩm →</a>
+        </div>
+    </div>
+</section>
+
+<!-- CHAT BUTTON -->
+<div class="chat-btn" title="Chat với AI tư vấn">
+    <i class="bi bi-chat-dots-fill"></i>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <p class="mb-0">© 2024 SmartHome — Đồ Gia Dụng Thông Minh | Made with ❤️ Spring Boot</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Load products từ REST API
+    fetch('/api/v1/products?size=6')
+        .then(r => r.json())
+        .then(data => {
+            const grid = document.getElementById('productGrid');
+            const products = data.data?.content || [];
+
+            if (products.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-12 text-center text-muted py-4">
+                        <i class="bi bi-box-seam" style="font-size:3rem;color:#6c63ff"></i>
+                        <p class="mt-2">Chưa có sản phẩm nào nổi bật. Vui lòng quay lại sau!</p>
+                    </div>`;
+                return;
+            }
+
+            products.forEach(p => {
+                const sale = p.salePrice ? `<span class="price-old">${fmtPrice(p.price)}</span> ` : '';
+                const price = p.salePrice || p.price;
+                grid.innerHTML += `
+                    <div class="col-md-4 col-6">
+                        <div class="card-product p-3 h-100">
+                            <img src="${getImg(p.imageUrls)}"
+                                 class="w-100 rounded mb-3" style="height:180px;object-fit:cover"
+                                 alt="${p.name}">
+                            <div class="small text-muted mb-1">${p.brand || ''}</div>
+                            <h6 class="fw-bold">${p.name}</h6>
+                            <div>${sale}<span class="price">${fmtPrice(price)}</span></div>
+                            <button class="btn btn-sm mt-2 w-100"
+                                style="background:linear-gradient(90deg,#6c63ff,#48cae4);color:white;border:none">
+                                🛒 Thêm giỏ hàng
+                            </button>
+                        </div>
+                    </div>`;
+            });
+        })
+        .catch(e => console.log('API error:', e));
+
+    function fmtPrice(p) {
+        return new Intl.NumberFormat('vi-VN', {style:'currency', currency:'VND'}).format(p);
+    }
+    function getImg(urls) {
+        try {
+            const arr = JSON.parse(urls);
+            return arr[0] || 'https://placehold.co/400x300?text=SmartHome';
+        } catch { return 'https://placehold.co/400x300?text=SmartHome'; }
+    }
+</script>
+</body>
+</html>
